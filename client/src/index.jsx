@@ -6,6 +6,9 @@ import Home from "./components/Home";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { AuthTokenProvider } from "./AuthTokenContext";
 
+import { ChakraProvider,Box  } from '@chakra-ui/react'
+import Header from "./components/Header";
+
 const container = document.getElementById("root");
 const root = ReactDOMClient.createRoot(container);
 
@@ -23,12 +26,15 @@ root.render(
       }}
     >
       <AuthTokenProvider>
+      <ChakraProvider>
         <BrowserRouter>
+          <Header />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        </ChakraProvider>
       </AuthTokenProvider>
     </Auth0Provider>
   </React.StrictMode>
