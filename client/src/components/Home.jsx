@@ -1,6 +1,7 @@
 import "../style/home.css";
 
 import MovieCard from "./MovieCard";
+import MovieCarousel from "./MovieCarousel";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +14,8 @@ const movie = {
   isLiked: false,
 }
 
+const movies = Array.from({ length: 10 }, () => ({ ...movie }));
+
 // the home page should contain the 
 export default function Home() {
   const navigate = useNavigate();
@@ -21,7 +24,8 @@ export default function Home() {
 
   return (
     <div className="home">
-      <MovieCard w='220px' movie={movie} />
+      <MovieCarousel movies={movies} w='150px' width="100%"/>
+
     </div>
   );
 }
