@@ -39,25 +39,35 @@ export default function MovieCard({
 			position='relative'
 			w={w}
 		>
-			<Image src={imageUrl} alt={`Poster of ${title}`} />
-			<Box p='4'>
-				<Flex mb='2' align='center' justify='space-between'>
-					<CircularProgress value={rating * 10} color={colorScheme} size='50px'>
-						<CircularProgressLabel>{rating * 10}%</CircularProgressLabel>
-					</CircularProgress>
-					<IconButton
+			<Box position='relative'>
+				<Image src={imageUrl} alt={`Poster of ${title}`} />
+				<CircularProgress
+					value={rating * 10}
+					color={colorScheme}
+					size='40px'
+					position='absolute'
+					bottom='-20px'
+					left='5%'
+					zIndex='1'
+					bg='black'
+					borderRadius='50%'
+		
+				>
+					<CircularProgressLabel fontSize='16px'  bg='black.200' color="whitesmoke">{rating * 10}</CircularProgressLabel>
+				</CircularProgress>
+				<IconButton 
 						aria-label='Like movie'
-						icon={isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
+						icon={isLiked ? <AiFillHeart color='red' size="1.25em"/> : <AiOutlineHeart size='1.25em'/>}
 						variant='ghost'
 						isRound={true}
+						w='20px'
+						pos='absolute'
+						top='25px'
+						right='5%'
+						bg='whitesmoke'
 					/>
-					<IconButton
-						aria-label='More options'
-						icon={<HamburgerIcon />}
-						variant='ghost'
-						isRound={true}
-					/>
-				</Flex>
+			</Box>
+			<Box p='4' position='relative' zIndex='0' mt='20px'>
 				<Text
 					mt='1'
 					fontWeight='semibold'
