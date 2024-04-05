@@ -21,14 +21,8 @@ function ratingToColor(rating) {
 	}
 }
 
-export default function MovieCard({
-	title,
-	releaseDate,
-	imageUrl,
-	rating,
-	w,
-	isLiked = false,
-}) {
+export default function MovieCard({movie, w='220px'}) {
+	const { title, releaseDate, imageUrl, rating, isLiked } = movie;
 	const colorScheme = ratingToColor(rating);
 	return (
 		<Box
