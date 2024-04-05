@@ -4,6 +4,7 @@ import MovieCard from "./MovieCard";
 import MovieCarousel from "./MovieCarousel";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
+import {  Box, Heading, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 
 
 const movie = {
@@ -23,10 +24,28 @@ export default function Home() {
   const signUp = () => loginWithRedirect({ screen_hint: "signup" });
 
   return (
-    <div className="home">
-      <MovieCarousel movies={movies} w='150px' width="100%"/>
-
-    </div>
+    <Box p={{ base: 10, md: 20, lg: 30 }}>
+      <Box mb={4}>
+      <Heading as="h2" size="lg" py='5'>Trending</Heading>
+      <Tabs isFitted variant="enclosed">
+          <TabList mb="1em">
+            <Tab>Today</Tab>
+            <Tab>This Week</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              {/* Content for Today */}
+              <MovieCarousel movies={movies} w='150px' width="100%" />
+            </TabPanel>
+            <TabPanel>
+              {/* Content for This Week */}
+              <MovieCarousel movies={movies} w='150px' width="100%" />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      
+      </Box>
+    </Box>
   );
 }
 

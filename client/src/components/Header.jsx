@@ -26,7 +26,8 @@ export default function Header() {
 	const color = useColorModeValue('white', 'gray.200'); // Light mode: white text, dark mode: slightly darker text
 	const isMobile = useBreakpointValue({ base: true, md: false }); // If the screen is smaller than 48em, isMobile is true
 	return (
-		<Container maxW='1280px' w='100%' mx='auto' px={0}>
+
+			<>
 			<Flex
 				alignItems='center'
 				justifyContent='space-between'
@@ -49,6 +50,7 @@ export default function Header() {
 					<ProfileMenu isAuthenticated={isAuthenticated} user={user} login={loginWithRedirect} logout={logout}/>
 				</Box>
 			</Flex>
-		</Container>
+			</>
+
 	);
 }

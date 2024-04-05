@@ -42,7 +42,8 @@ root.render(
     >
       <AuthTokenProvider>
       <ChakraProvider>
-        <BrowserRouter>        
+        <BrowserRouter>    
+        <Container maxW='1280px' w='100%' mx='auto' px={0}>  
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -57,7 +58,7 @@ root.render(
             ></Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
-          
+          </Container>  
         </BrowserRouter>
         
         </ChakraProvider>
