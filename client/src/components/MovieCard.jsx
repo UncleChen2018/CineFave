@@ -36,7 +36,7 @@ export default function MovieCard({movie, w='220px'}) {
 			<Box position='relative'>
 				<Image src={imageUrl} alt={`Poster of ${title}`} />
 				<CircularProgress
-					value={rating * 10}
+					value={Math.round(rating * 10)}
 					color={colorScheme}
 					size='40px'
 					position='absolute'
@@ -47,7 +47,7 @@ export default function MovieCard({movie, w='220px'}) {
 					borderRadius='50%'
 		
 				>
-					<CircularProgressLabel fontSize='16px'  bg='black.200' color="whitesmoke">{rating * 10}</CircularProgressLabel>
+					<CircularProgressLabel fontSize='16px'  bg='black.200' color="whitesmoke">{Math.round(rating * 10)}</CircularProgressLabel>
 				</CircularProgress>
 				<IconButton 
 						aria-label='Like movie'
@@ -68,6 +68,7 @@ export default function MovieCard({movie, w='220px'}) {
 					as='h4'
 					lineHeight='tight'
 					noOfLines={2}
+					minHeight="3rem"
 				>
 					{title}
 				</Text>
