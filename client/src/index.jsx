@@ -7,7 +7,9 @@ import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import { AuthTokenProvider } from "./AuthTokenContext";
 import AuthDebugger from "./components/AuthDebugger";
 
+// import chakra ui components
 import { ChakraProvider,Box, Container  } from '@chakra-ui/react'
+import theme from './theme';
 import Header from "./components/Header";
 import AppLayout from "./components/AppLayout";
 
@@ -41,7 +43,7 @@ root.render(
       }}
     >
       <AuthTokenProvider>
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <BrowserRouter>    
         <Container maxW='1280px' w='100%' mx='auto' px={0}>  
           <Header />
