@@ -24,9 +24,11 @@ export default function Home() {
   const signUp = () => loginWithRedirect({ screen_hint: "signup" });
 
   return (
-    <Box p={{ base: 10, md: 20, lg: 30 }}>
+    <Box p={{ base: 5, md: 20, lg: 30 }} mt={-5}>
       <Box mb={4}>
-      <Heading as="h2" size="lg" py='5'>Trending</Heading>
+      <Heading as="h2" size="lg" py='5' sx={{
+    fontSize: ['md', 'lg', 'xl', '2xl'], 
+  }}>Trending</Heading>
       <Tabs isFitted variant="enclosed">
           <TabList mb="1em">
             <Tab>Today</Tab>
@@ -35,11 +37,11 @@ export default function Home() {
           <TabPanels>
             <TabPanel>
               {/* Content for Today */}
-              <MovieCarousel movies={movies} w='150px' width="100%" />
+              <MovieCarousel movies={movies} w={['120px','150px']}  />
             </TabPanel>
             <TabPanel>
               {/* Content for This Week */}
-              <MovieCarousel movies={movies} w='150px' width="100%" />
+              <MovieCarousel movies={movies} w={['120px','150px']}  />
             </TabPanel>
           </TabPanels>
         </Tabs>

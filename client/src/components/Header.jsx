@@ -27,7 +27,7 @@ export default function Header() {
 	const isMobile = useBreakpointValue({ base: true, md: false }); // If the screen is smaller than 48em, isMobile is true
 	return (
 
-			<>
+		
 			<Flex
 				alignItems='center'
 				justifyContent='space-between'
@@ -35,22 +35,22 @@ export default function Header() {
 				bg='blue.500'
 				color='white'
 			>
-				<Box flex='1' ml='60px'>
+				<Box flex='1' ml={{ base: '0', sm: '20px', md: '40px', lg: '60px' }}>
 					<Image src='cat_logo.webp' alt='Logo' h='60px' w='auto' />
 				</Box>
 				<Box flex='2' textAlign='center'>
-					<Heading as='h1' size='xl'>
+					<Heading as='h1' size='xl' >
 						CineFave
 					</Heading>
 					<Text fontSize='md' mt={2} fontWeight='light' letterSpacing='wide'>
 						Open movie review
 					</Text>
 				</Box>
-				<Box flex='1' textAlign='right' mr='60px'>
+				<Box flex='1' textAlign='right' mr={{ base: '0', sm: '20px', md: '40px', lg: '60px' }}>
 					<ProfileMenu isAuthenticated={isAuthenticated} user={user} login={loginWithRedirect} logout={logout}/>
 				</Box>
 			</Flex>
-			</>
+			
 
 	);
 }

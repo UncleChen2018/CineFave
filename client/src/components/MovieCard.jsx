@@ -61,7 +61,7 @@ export default function MovieCard({movie, w='220px'}) {
 						bg='whitesmoke'
 					/>
 			</Box>
-			<Box p='4' position='relative' zIndex='0' mt='20px'>
+			<Box p='4' position='relative' zIndex='0' mt='10px'>
 				<Text
 					mt='1'
 					fontWeight='semibold'
