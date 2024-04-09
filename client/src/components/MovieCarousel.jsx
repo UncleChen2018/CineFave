@@ -8,7 +8,7 @@ export default function MovieCarousel({ movies, w }) {
 	// Call useBreakpointValue at the top level of your component
 	//const scrollAmount = useBreakpointValue({ base: 150, md: 300, lg: 450 }) || 300;
 	const gap = 4;
-	const scrollAmount = parseInt(w, 10) + gap * 4;
+	const scrollAmount = 2*(parseInt(w, 10) + gap * 4);
 	const scroll = (direction) => {
 		const { current } = scrollContainer;
 		if (current) {
@@ -46,6 +46,7 @@ export default function MovieCarousel({ movies, w }) {
 				transform='translateY(-50%)'
 				zIndex='banner'
 				onClick={() => scroll('left')}
+				size={['sm', 'sm', 'md', 'md']}
 			>
 				<ChevronLeftIcon />
 			</Button>
@@ -56,6 +57,7 @@ export default function MovieCarousel({ movies, w }) {
 				transform='translateY(-50%)'
 				zIndex='banner'
 				onClick={() => scroll('right')}
+				size={['sm', 'sm', 'md', 'md']}
 			>
 				<ChevronRightIcon />
 			</Button>

@@ -1,11 +1,19 @@
-import "../style/home.css";
+import '../style/home.css';
 
-import React, { useEffect, useState } from "react";
-import MovieCarousel from "./MovieCarousel";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useNavigate } from "react-router-dom";
-import {  Box, Heading, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
-
+import React, { useEffect, useState } from 'react';
+import MovieCarousel from './MovieCarousel';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useNavigate } from 'react-router-dom';
+import {
+	Box,
+	Heading,
+	Tab,
+	TabList,
+	TabPanel,
+	TabPanels,
+	Tabs,
+} from '@chakra-ui/react';
+import { m } from 'framer-motion';
 
 // const movie = {
 //   title: 'example',
@@ -17,92 +25,105 @@ import {  Box, Heading, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-
 
 // const movies = Array.from({ length: 10 }, () => ({ ...movie }));
 
-// the home page should contain the 
+// the home page should contain the
 export default function Home() {
-  const navigate = useNavigate();
-  const { isAuthenticated, loginWithRedirect } = useAuth0();
-  const signUp = () => loginWithRedirect({ screen_hint: "signup" });
+	const navigate = useNavigate();
+	const { isAuthenticated, loginWithRedirect } = useAuth0();
+	const signUp = () => loginWithRedirect({ screen_hint: 'signup' });
 
-  // fetch movies from the api
-  const [movies, setMovies] = useState([]); // State to hold movie data
-  const [isLoading, setIsLoading] = useState(false); // State to track loading status
-  const [error, setError] = useState(null); // State to hold any errors
+	// fetch movies from the api
+	const [moviesTD, setMoviesTD] = useState([]); // State to hold movie trending by day data
+	const [moviesTW, setMoviesTW] = useState([]); // State to hold movie trending by week data
+	const [isLoading, setIsLoading] = useState(false); // State to track loading status
+	const [error, setError] = useState(null); // State to hold any errors
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      setIsLoading(true); // Begin loading
-      setError(null); // Reset errors
+	useEffect(() => {
+		const fetchMovies = async (endpoint) => {
+			try {
+				const baseUrl = process.env.REACT_APP_TMDB_BASE_URL;
+				const apiKey = process.env.REACT_APP_TMDB_API_KEY;
+				const url = `${baseUrl}${endpoint}?api_key=${apiKey}`;
 
-      try {
-        // Replace 'your-api-endpoint' with the actual endpoint
-        const baseUrl = process.env.REACT_APP_TMDB_BASE_URL;
-        const apiKey = process.env.REACT_APP_TMDB_API_KEY;
-        const trendingDay = process.env.REACT_APP_TMDB_ENDPOINT_TRENDING_DAY;
-        const trendingWeek = process.env.REACT_APP_TMDB_ENDPOINT_RENDING_WEEK;  
-        const urlTrendingDay = `${baseUrl}${trendingDay}?api_key=${apiKey}`;  
-        
-        const response = await fetch(urlTrendingDay);
-        
-        
-        if (!response.ok) {
-          throw new Error('Something went wrong!'); // Throw an error if the response is not ok
-        }
 
-        const data = await response.json(); // Parse JSON data from the response
-        // Map the results to a more friendly format
-        const updatedMovies = data.results.map((movie) => ({
+				const response = await fetch(url);
+				if (!response.ok) {
+					throw new Error('Something went wrong with the movie fetch.');
+				}
+
+				const data = await response.json();
+				return data.results.map((movie) => ({
           ...movie,
-          imageUrl: `${process.env.REACT_APP_TMDB_IMG_HOST_URL}${process.env.REACT_APP_TMDB_IMAGE_SIZE}${movie.poster_path}`,
-          releaseDate: movie.release_date,
-          rating: movie.vote_average,
-          title: movie.title,
+					id: movie.id,
+					title: movie.title,
+					releaseDate: movie.release_date,
+					rating: movie.vote_average,
+					imageUrl: `${process.env.REACT_APP_TMDB_IMG_HOST_URL}${process.env.REACT_APP_TMDB_IMAGE_SIZE}${movie.poster_path}`,
+				}));
+			} catch (error) {
+				throw error;
+			}
+		};
 
-        }));
-        //setMovies(updatedMovies);
+		const loadMovies = async () => {
+			setIsLoading(true);
+			setError(null);
 
-        console.log(updatedMovies);
-        setMovies(updatedMovies)
-        
-      } catch (error) {
-        setError(error.message); // Catch any errors and set an error message in state
-      } finally {
-        setIsLoading(false); // Finish loading regardless of success or error
-      }
-    };
-
-    fetchMovies(); // Execute the asynchronous function
-    console.log("movies",movies);
-  }, []); // Empty dependency array means this effect runs once on mount
+			try {
+				const moviesTD = await fetchMovies(
+					process.env.REACT_APP_TMDB_ENDPOINT_TRENDING_DAY
+				);
+				const moviesTW = await fetchMovies(
+					process.env.REACT_APP_TMDB_ENDPOINT_RENDING_WEEK
+				);
 
 
+				setMoviesTD(moviesTD);
+				setMoviesTW(moviesTW);
+			} catch (error) {
+				setError(error.message);
+			} finally {
+				setIsLoading(false);
+			}
+		};
 
+		loadMovies();
 
-  return (
-    <Box p={{ base: 5, md: 20, lg: 30 }} mt={-5}>
-      <Box mb={4}>
-      <Heading as="h2" size="lg" py='5' sx={{
-    fontSize: ['md', 'lg', 'xl', '2xl'], 
-  }}>Trending</Heading>
-      <Tabs isFitted variant="enclosed">
-          <TabList mb="1em">
-            <Tab>Today</Tab>
-            <Tab>This Week</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              {/* Content for Today */}
-              <MovieCarousel movies={movies} w={['120px','150px']}  />
-            </TabPanel>
-            <TabPanel>
-              {/* Content for This Week */}
-              <MovieCarousel movies={movies} w={['120px','150px']}  />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      
-      </Box>
-    </Box>
-  );
+	}, []); // Only run on mount
+
+	return (
+		<Box p={{ base: 5, md: 20, lg: 30 }} mt={-5}>
+			<Box mb={4}>
+				<Heading
+					as='h2'
+					size='lg'
+					py='5'
+					sx={{
+						fontSize: ['md', 'lg', 'xl', '2xl'],
+					}}
+				>
+					Trending
+				</Heading>
+				<Tabs isFitted variant='enclosed'>
+					<TabList mb='1em'>
+						<Tab fontSize={['sm', 'md', 'lg', 'lg']} fontWeight='semibold'>
+							Today
+						</Tab>
+						<Tab fontSize={['sm', 'md', 'lg', 'lg']} fontWeight='semibold'>
+							This Week
+						</Tab>
+					</TabList>
+					<TabPanels>
+						<TabPanel>
+							{/* Content for Today */}
+							<MovieCarousel movies={moviesTD} w={['120px', '150px']} />
+						</TabPanel>
+						<TabPanel>
+							{/* Content for This Week */}
+							<MovieCarousel movies={moviesTW} w={['120px', '150px']} />
+						</TabPanel>
+					</TabPanels>
+				</Tabs>
+			</Box>
+		</Box>
+	);
 }
-
-
