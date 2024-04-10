@@ -66,6 +66,7 @@ export default function MovieCard({ movie, w }) {
 						color='whitesmoke'
 					>
 						{Math.round(rating * 10)}
+						<Text  as="span" fontSize="0.5em" lineHeight="16px">%</Text>
 					</CircularProgressLabel>
 				</CircularProgress>
 				<IconButton
