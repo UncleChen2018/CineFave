@@ -1,49 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
 import GenreTags from './GenreTags';
 import {
 	Box,
 	Flex,
 	Image,
 	Heading,
+	HStack,
 	Text,
 	VStack,
 	SimpleGrid,
 	Divider,
+	Link,
 } from '@chakra-ui/react';
 
-// Usage
-const movie = {
-	title: 'Kung Fu Panda 4',
-	releaseYear: '2024',
-	genres: [
-		{
-			id: 28,
-			name: 'Action',
-		},
-		{
-			id: 12,
-			name: 'Adventure',
-		},
-		{
-			id: 16,
-			name: 'Animation',
-		},
-		{
-			id: 35,
-			name: 'Comedy',
-		},
-		{
-			id: 10751,
-			name: 'Family',
-		},
-	],
-	duration: '1h 34m',
-	imageUrl:
-		'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/kDp1vUBnMpe8ak4rjgl3cLELqjU.jpg',
-	overview:
-		'Po is gearing up to become the spiritual leader of his Valley of Peace...',
-};
 
 const reviews = [
 	{
@@ -56,6 +27,53 @@ const reviews = [
 ];
 
 function MovieDetailPage() {
+	const { id } = useParams();
+
+	const [movie, setMovie] = useState(null); // State to hold the movie details
+
+	useEffect(() => {
+		const fetchMovieDetails = async () => {
+      const baseUrl = process.env.REACT_APP_TMDB_BASE_URL;
+				const apiKey = process.env.REACT_APP_TMDB_API_KEY;
+				
+			const endpoint = process.env.REACT_APP_TMDB_ENDPOINT_MOVIE_DETAILS;
+			const url = `${baseUrl}${endpoint}/${id}?api_key=${apiKey}`; // Replace YOUR_API_KEY with your actual TMDB API key
+    
+			try {
+				const response = await fetch(url);
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+				const data = await response.json();
+				setMovie(data);
+			} catch (error) {
+				console.error('Fetching movie details failed:', error);
+			}
+		};
+
+		fetchMovieDetails();
+    console.log(movie);
+	}, [id]); // The effect depends on the movie ID
+
+	if (!movie) {
+		return <Box>Loading...</Box>; // Loading state or a spinner can be placed here
+	}
+
+	const {
+		title,
+		overview,
+		release_date,
+		runtime,
+		genres,
+		poster_path,
+		homepage,
+		tagline,
+		production_companies,
+	} = movie;
+
+	const runtimeHours = Math.floor(runtime / 60);
+	const runtimeMinutes = runtime % 60;
+
 	return (
 		<Box mt='4' p='2'>
 			{/* Movie Info and Image */}
@@ -73,21 +91,33 @@ function MovieDetailPage() {
 					overflow='hidden' // In case the Image is larger than the Box
 				>
 					<Image
-						src={movie.imageUrl}
+						src={`https://image.tmdb.org/t/p/w342${poster_path}`}
 						alt={`Poster of ${movie.title}`}
 						borderRadius='lg'
 					/>
 				</Box>
-				<VStack align='start' spacing={4} p='4'>
+				<VStack align='start' spacing={4}>
 					<Heading as='h2' size='xl'>
-						{movie.title} ({movie.releaseYear})
+						{title} ({new Date(release_date).getFullYear()}) {id}
 					</Heading>
-					<Text fontSize='lg' color='gray.600'>
-						<GenreTags genres={movie.genres} />
-						{movie.duration}
+					{tagline && <Text fontStyle='italic'>"{tagline}"</Text>}
+					<GenreTags genres={genres} />
+					<Text fontSize='md' color='gray.600'>
+						{release_date} • {runtimeHours}h {runtimeMinutes}m
 					</Text>
-					<Text>{movie.overview}</Text>
-					{/* Add more movie details here */}
+					<Text fontSize='lg'>{overview}</Text>
+					{homepage && (
+						<Link href={homepage} isExternal>
+							Official Website
+						</Link>
+					)}
+					<HStack>
+						{production_companies.map((company) => (
+							<Text key={company.id} fontSize='sm'>
+								{company.name}
+							</Text>
+						))}
+					</HStack>
 				</VStack>
 			</SimpleGrid>
 
@@ -120,12 +150,5 @@ function MovieDetailPage() {
 	);
 }
 
-function App() {
-	return (
-		<Box p={8}>
-			<MovieDetailPage movie={movie} reviews={reviews} />
-		</Box>
-	);
-}
 
 export default MovieDetailPage;
