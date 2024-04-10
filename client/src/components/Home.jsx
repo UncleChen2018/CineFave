@@ -78,7 +78,13 @@ export default function Home() {
 
 	}, []); // Only run on mount
 
+	if (!moviesTD || !moviesTW ) {
+		return <Box>Loading...</Box>; // Loading state or a spinner can be placed here
+	}
+
 	return (
+
+		
 		<Box p={{ base: 5, md: 20, lg: 30 }} mt={-5}>
 			<Box mb={4}>
 				<Heading
