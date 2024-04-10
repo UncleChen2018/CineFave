@@ -12,6 +12,7 @@ import { ChakraProvider,Box, Container  } from '@chakra-ui/react'
 import theme from './theme';
 import Header from "./components/Header";
 import AppLayout from "./components/AppLayout";
+import MovieDetailPage from "./components/MovieDetailPage";
 
 const container = document.getElementById("root");
 const root = ReactDOMClient.createRoot(container);
@@ -50,14 +51,8 @@ root.render(
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/verify-user" element={<AuthDebugger />} />
-            <Route
-              path="app"
-              element={
-                <RequireAuth>
-                  <AppLayout />
-                </RequireAuth>
-              }
-            ></Route>
+            <Route path="/movie/:id" element={<MovieDetailPage />} />
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
           </Container>  

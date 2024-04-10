@@ -36,7 +36,7 @@ export default function Header() {
 				color='white'
 			>
 				<Box flex='1' ml={{ base: '0', sm: '20px', md: '40px', lg: '60px' }}>
-					<Image src='cat_logo.webp' alt='Logo' h='60px' w='auto' />
+					<Image src='/cat_logo.webp' alt='Logo' h='60px' w='auto' />
 				</Box>
 				<Box flex='2' textAlign='center'>
 					<Heading as='h1' size='xl' >
