@@ -63,8 +63,6 @@ export default function Home() {
 				const moviesTW = await fetchMovies(
 					process.env.REACT_APP_TMDB_ENDPOINT_RENDING_WEEK
 				);
-
-
 				setMoviesTD(moviesTD);
 				setMoviesTW(moviesTW);
 			} catch (error) {

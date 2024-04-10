@@ -9,6 +9,8 @@ import {
 	Text,
 } from '@chakra-ui/react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
+
 import { HamburgerIcon } from '@chakra-ui/icons';
 
 function ratingToColor(rating) {
@@ -22,8 +24,14 @@ function ratingToColor(rating) {
 }
 
 export default function MovieCard({ movie, w }) {
-	const { title, releaseDate, imageUrl, rating, isLiked } = movie;
+	const { id, title, releaseDate, imageUrl, rating, isLiked } = movie;
 	const colorScheme = ratingToColor(rating);
+
+	const navigate = useNavigate();
+	const navigateToMovieDetail = () => {
+		navigate(`/movie/${id}`);
+	};
+
 	return (
 		<Box
 			maxW='sm'
@@ -35,7 +43,12 @@ export default function MovieCard({ movie, w }) {
 			w={w}
 		>
 			<Box position='relative'>
-				<Image src={imageUrl} alt={`Poster of ${title}`} />
+				<Image
+					src={imageUrl}
+					alt={`Poster of ${title}`}
+					cursor='pointer'
+					onClick={navigateToMovieDetail}
+				/>
 				<CircularProgress
 					value={Math.round(rating * 10)}
 					color={colorScheme}

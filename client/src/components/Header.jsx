@@ -42,7 +42,10 @@ export default function Header() {
 					}}
 				/>
 			</Box>
-			<Box flex='2' textAlign='center'>
+			<Box flex='2' textAlign='center' cursor='pointer'
+					onClick={() => {
+						navigate('/'); // Navigate to the home page
+					}}>
 				<Heading as='h1' size='xl'>
 					CineFave
 				</Heading>

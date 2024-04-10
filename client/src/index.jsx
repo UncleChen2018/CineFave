@@ -46,16 +46,24 @@ root.render(
       <AuthTokenProvider>
       <ChakraProvider theme={theme}>
         <BrowserRouter>    
-        <Container maxW='1280px' w='100%' mx='auto' px={0}>  
+        <Box  maxW='1280px' w='100%' mx='auto' px={0}>  
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/verify-user" element={<AuthDebugger />} />
             <Route path="/movie/:id" element={<MovieDetailPage />} />
-            
+            <Route
+              path="profile"
+              element={
+                <RequireAuth>
+                  <AppLayout />
+                  
+                </RequireAuth>
+              }
+            ><Route index element={<AuthDebugger />} /></Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
-          </Container>  
+          </Box >  
         </BrowserRouter>
         
         </ChakraProvider>
