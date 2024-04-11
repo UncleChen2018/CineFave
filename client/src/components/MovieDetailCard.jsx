@@ -1,5 +1,6 @@
 import React from 'react';
-import { SimpleGrid, Box, Image, VStack, Heading, Text, Link, HStack } from '@chakra-ui/react';
+import {Tag, SimpleGrid, Box, Icon, Image, VStack, Heading, Text, Link, HStack } from '@chakra-ui/react';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import GenreTags from './GenreTags'; // Assuming you have this component for displaying genres
 
 function MovieDetailCard({ movie }) {
@@ -19,7 +20,7 @@ function MovieDetailCard({ movie }) {
         overflow="hidden"
       >
         <Image
-          src={`https://image.tmdb.org/t/p/w342${poster_path}`}
+          src={poster_path}
           alt={`Poster of ${title}`}
           borderRadius="lg"
         />
@@ -28,22 +29,29 @@ function MovieDetailCard({ movie }) {
         <Heading as="h2" size="xl">
           {title} ({new Date(release_date).getFullYear()})
         </Heading>
-        {tagline && <Text fontStyle="italic">"{tagline}"</Text>}
+        {tagline && (
+          <Text fontSize="xl" color="blue.500" fontStyle="italic" fontWeight="bold" >
+            "{tagline}"
+          </Text>
+        )}
         <GenreTags genres={genres} />
         <Text fontSize="md" color="gray.600">
           {release_date} • {runtimeHours}h {runtimeMinutes}m
         </Text>
         <Text fontSize="lg">{overview}</Text>
         {homepage && (
-          <Link href={homepage} isExternal>
-            Official Website
+          <Link href={homepage} isExternal color="teal.500" fontWeight="bold">
+            <HStack>
+              <Icon as={ExternalLinkIcon} />
+              <Text>Official Website</Text>
+            </HStack>
           </Link>
         )}
-        <HStack>
+        <HStack spacing={2} wrap="wrap">
           {production_companies.map((company) => (
-            <Text key={company.id} fontSize="sm">
+            <Tag key={company.id} size="md" borderRadius="full" variant="outline" colorScheme="gray">
               {company.name}
-            </Text>
+            </Tag>
           ))}
         </HStack>
       </VStack>
