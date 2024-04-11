@@ -22,14 +22,17 @@ export default function VerifyUser() {
       const user = await data.json();
 
       if (user.auth0Id) {
+        navigate("/profile");
+      }
+      else {
         navigate("/");
       }
     }
 
     if (accessToken) {
-      navigate("/profile");
+      verifyUser();
     }
-    
+
   }, [accessToken, navigate]);
 
   return <div className="loading">Loading...</div>;

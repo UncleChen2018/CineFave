@@ -10,7 +10,7 @@ export default function useUserProfile() {
   useEffect(() => {
     async function getUserInfoFromApi() {
       // fetch the user profile from the API, passing the access token in the Authorization header
-      const data = await fetch(`${process.env.REACT_APP_API_URL}/userInfo`, {
+      const data = await fetch(`${process.env.REACT_APP_API_URL}/userProfile`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

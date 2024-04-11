@@ -5,7 +5,7 @@ import UserOverview from './UserOverview';
 import UserReviews from './UserReviews';
 import UserFavorites from './UserFavorites';
 
-import useUserProfile from '../hooks/useUserInfo';
+import useUserProfile from '../hooks/useUserProfile';
 
 import {
 	Box,

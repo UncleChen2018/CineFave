@@ -15,6 +15,12 @@ const requireAuth = auth({
 
 const app = express();
 
+
+
+// Then, use these options with the cors middleware in your Express app
+//app.use(cors(corsOptions));
+
+
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -29,8 +35,45 @@ app.get("/ping", (req, res) => {
 });
 
 // add your endpoints below this line
+// this endpoint is used by the client to verify the user status and to make sure the user is registered in our database once they signup with Auth0
+// if not registered in our database we will create it.
+// if the user is already registered we will return the user information
+app.post("/verify-user", requireAuth, async (req, res) => {
+  try{
+  const auth0Id = req.auth.payload.sub;
+  const email = req.auth.payload[`${process.env.AUTH0_AUDIENCE}/email`];
+  const name = req.auth.payload[`${process.env.AUTH0_AUDIENCE}/name`];
+
+
+  const user = await prisma.user.findUnique({
+    where: {
+      auth0Id,
+    },
+  });
+
+  if (user) {
+    res.json(user);
+  } else {
+    
+    const newUser = await prisma.user.create({
+      data: {
+        email,
+        auth0Id,
+        name,
+      },
+    });
+
+    res.json(newUser);
+  }
+} catch (error) {
+  res.status(500).json({ error: error.message });
+}
+});
+
+
+
 // get Profile information of authenticated user
-app.get("/me", requireAuth, async (req, res) => {
+app.get("/userProfile", requireAuth, async (req, res) => {
   const auth0Id = req.auth.payload.sub;
 
   const user = await prisma.user.findUnique({
