@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,9 +7,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Favorite {
+  user_id     Int
+  movie_id    Int
+  create_time DateTime @default(now())
+  user        User     @relation(fields: [user_id], references: [id])
+
+  @@id([user_id, movie_id]) // Composite primary key
+  @@map("favorite")
+}
+
+model Review {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  movie_id    Int
+  title       String?  @db.VarChar(255)
+  content     String?  @db.Text
+  rate        Float?   @db.Float
+  status      Int      @default(0) // 0: valid, 1: invalid 2: deleted  
+  create_time DateTime @default(now())
+  update_time DateTime @db.DateTime(0)
+  user        User     @relation(fields: [user_id], references: [id])
+
+  @@map("review")
+}
+
 model User {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
-  auth0Id      String   @unique @default("")
-  name         String?
+  id          Int        @id @default(autoincrement())
+  email       String     @unique
+  auth0Id     String     @unique
+  name        String? // Optional, can be null
+  bio         String?    @db.Text // Optional, can be null
+  create_time DateTime   @default(now())
+  update_time DateTime   @updatedAt
+  favorites   Favorite[]
+  reviews     Review[]
+
+  @@map("user")
 }
