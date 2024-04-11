@@ -3,6 +3,7 @@ import {Tag, SimpleGrid, Box, Icon, Image, VStack, Heading, Text, Link, HStack }
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import GenreTags from './GenreTags'; // Assuming you have this component for displaying genres
 
+
 function MovieDetailCard({ movie }) {
   const { poster_path, title, release_date, tagline, genres, overview, homepage, production_companies } = movie;
   const runtimeHours = Math.floor(movie.runtime / 60);

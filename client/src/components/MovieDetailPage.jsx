@@ -61,9 +61,6 @@ function MovieDetailPage() {
 	}, [id]); // Effect runs when the 'id' changes
 	
 
-
-
-
 	if (!movie) {
 		return <Box>Loading...</Box>; // Loading state or a spinner can be placed here
 	}
@@ -76,7 +73,9 @@ function MovieDetailPage() {
 			<Divider my={10} />
 
 			{/* Review List */}
-			<ReviewList reviews={movie.reviews} />
+			<ReviewList reviews={null} title={'Reviews from CineFav'} />
+			<Divider my={10} />
+			<ReviewList reviews={movie.reviews} title={'Reviews from TMDB'} />
 		</Box>
 	);
 }

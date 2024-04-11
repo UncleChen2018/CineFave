@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { FiUser } from 'react-icons/fi'; // Import the icon
 
-const ProfileMenu = ({ isAuthenticated, user, login, logout }) => {
+const LoginMenu = ({ isAuthenticated, user, login, logout }) => {
 	return (
 		<Menu>
 			{isAuthenticated ? (
@@ -52,4 +52,4 @@ const ProfileMenu = ({ isAuthenticated, user, login, logout }) => {
 	);
 };
 
-export default ProfileMenu;
+export default LoginMenu;

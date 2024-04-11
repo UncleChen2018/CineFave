@@ -10,18 +10,9 @@ import {
 } from '@chakra-ui/react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
+import { ratingToColor } from '../utilities';
 
-import { HamburgerIcon } from '@chakra-ui/icons';
 
-function ratingToColor(rating) {
-	if (rating >= 7) {
-		return 'green.400';
-	} else if (rating >= 4) {
-		return 'yellow.400';
-	} else {
-		return 'red.400';
-	}
-}
 
 export default function MovieCard({ movie, w }) {
 	const { id, title, releaseDate, imageUrl, rating, isLiked } = movie;

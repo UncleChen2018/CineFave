@@ -12,7 +12,7 @@ import {
 
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
-import ProfileMenu from './ProfileMenu';
+import LoginMenu from './LoginMenu';
 
 export default function Header() {
 	const navigate = useNavigate();
@@ -58,7 +58,7 @@ export default function Header() {
 				textAlign='right'
 				mr={{ base: '0', sm: '20px', md: '40px', lg: '60px' }}
 			>
-				<ProfileMenu
+				<LoginMenu
 					isAuthenticated={isAuthenticated}
 					user={user}
 					login={loginWithRedirect}
