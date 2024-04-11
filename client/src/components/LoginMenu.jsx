@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import {
 	Menu,
 	MenuButton,
@@ -9,9 +11,9 @@ import {
 	Button,
 	Avatar,
 } from '@chakra-ui/react';
-import { FiUser } from 'react-icons/fi'; // Import the icon
 
 const LoginMenu = ({ isAuthenticated, user, login, logout }) => {
+	const navigate = useNavigate();
 	return (
 		<Menu>
 			{isAuthenticated ? (
@@ -28,10 +30,11 @@ const LoginMenu = ({ isAuthenticated, user, login, logout }) => {
 							color='blue.600'
 						>
 							<MenuDivider />
-							<MenuItem>View Profile</MenuItem>
-							<MenuItem>Discussions</MenuItem>
-							<MenuItem>Lists</MenuItem>
-							<MenuItem>Ratings</MenuItem>
+							<MenuItem onClick={() => navigate('/profile')}>
+								View Profile
+							</MenuItem>
+							<MenuItem>Edit Profile</MenuItem>
+							<MenuItem onClick={() => navigate('/profile/auth_debugger')}>AuthDebugger</MenuItem>
 						</MenuGroup>
 						<MenuDivider />
 						<MenuGroup>

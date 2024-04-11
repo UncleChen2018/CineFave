@@ -29,6 +29,18 @@ app.get("/ping", (req, res) => {
 });
 
 // add your endpoints below this line
+// get Profile information of authenticated user
+app.get("/me", requireAuth, async (req, res) => {
+  const auth0Id = req.auth.payload.sub;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      auth0Id,
+    },
+  });
+
+  res.json(user);
+});
 
 
 app.listen(8000, () => {
