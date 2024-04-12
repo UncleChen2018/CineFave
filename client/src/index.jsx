@@ -10,6 +10,7 @@ import {
 
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import { AuthTokenProvider } from './AuthTokenContext';
+import { UserInfoProvider } from './UserInfoContext';
 
 import { ChakraProvider, Box, Container } from '@chakra-ui/react';
 import theme from './theme';
@@ -22,6 +23,7 @@ import MovieDetailPage from './components/MovieDetailPage';
 import ProfilePage from './components/ProfilePage';
 import AuthDebugger from './components/AuthDebugger';
 import VerifyUser from './components/VerifyUser';
+import EditProfilePage from './components/EditProfilePage';
 
 const container = document.getElementById('root');
 const root = ReactDOMClient.createRoot(container);
@@ -38,10 +40,10 @@ function RequireAuth({ children }) {
 
 	// Otherwise, display the children (the protected page)
 	return (
-		<div>
+		<UserInfoProvider>
 			{children}
 			<Outlet /> {/* Render nested routes */}
-		</div>
+		</UserInfoProvider>
 	);
 }
 
@@ -67,6 +69,7 @@ root.render(
 								<Route path='/movie/:id' element={<MovieDetailPage />} />
 								<Route path='/profile' element={<RequireAuth />}>
 									<Route index element={<ProfilePage />} />
+									<Route path='edit' element={<EditProfilePage />} />
 									<Route path='auth_debugger' element={<AuthDebugger />} />
 								</Route>
 								<Route path='*' element={<NotFound />} />

@@ -1,9 +1,12 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import { Routes, Route, NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {useAuth0 } from "@auth0/auth0-react";
 import UserOverview from './UserOverview';
 import UserReviews from './UserReviews';
 import UserFavorites from './UserFavorites';
+
+import { useUserInfo } from '../UserInfoContext'; // Adjust the import path as needed
+
 
 import useUserProfile from '../hooks/useUserProfile';
 
@@ -19,10 +22,7 @@ import {
 	SimpleGrid,
 } from '@chakra-ui/react';
 
-// Assuming these mock data are defined elsewhere in your file
-const userProfile = {
-	bio: 'A movie enthusiast with a penchant for the classics.',
-};
+
 
 const userReviews = [
 	{
@@ -38,9 +38,7 @@ const favoriteMovies = [
 ];
 
 function ProfilePage() {
-  const { user } = useAuth0();
-  const [userProfile, setUserProfile] = useUserProfile();
-  const userFullInfo = { ...user, ...userProfile };
+	const [userInfo, setUserInfo] = useUserInfo();
 	return (
 		<Box padding='4'>
 			<Tabs isFitted variant='enclosed'>
@@ -51,7 +49,7 @@ function ProfilePage() {
 				</TabList>
 				<TabPanels>
 					<TabPanel>
-						<UserOverview userInfo={userFullInfo}/>
+						<UserOverview userInfo={userInfo}/>
 					</TabPanel>
 					<TabPanel>
 						<UserReviews reviews={userReviews}/>

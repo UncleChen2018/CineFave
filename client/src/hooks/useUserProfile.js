@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuthToken } from "../AuthTokenContext";
 
-// this is a custom hook that fetches the todos items from the API
+// here, get the user profile stored in the localhost from the API
 // custom hooks are a way to share logic between components
 export default function useUserProfile() {
   const [userProfile, setUserProfile] = useState([]);
