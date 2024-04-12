@@ -40,6 +40,8 @@ app.post('/verify-user', requireAuth, async (req, res) => {
 		const auth0Id = req.auth.payload.sub;
 		const email = req.auth.payload[`${process.env.AUTH0_AUDIENCE}/email`];
 		const name = req.auth.payload[`${process.env.AUTH0_AUDIENCE}/name`];
+    const nickname = req.auth.payload[`${process.env.AUTH0_AUDIENCE}/nickname`];
+    const picture = req.auth.payload[`${process.env.AUTH0_AUDIENCE}/picture`];
 
 		const user = await prisma.user.findUnique({
 			where: {
@@ -55,10 +57,13 @@ app.post('/verify-user', requireAuth, async (req, res) => {
 					email,
 					auth0Id,
 					name,
+          nickname,
+          picture,
 				},
 			});
 
 			res.json(newUser);
+      console.log(newUser);
 		}
 	} catch (error) {
 		res.status(500).json({ error: error.message });
@@ -74,6 +79,8 @@ app.get('/userProfile', requireAuth, async (req, res) => {
 			auth0Id,
 		},
 	});
+
+  console.log(user);
 
 	res.json(user);
 });

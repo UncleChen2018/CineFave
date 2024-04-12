@@ -1,39 +1,32 @@
-import "../style/appLayout.css";
+import '../style/appLayout.css';
 
-import { useEffect } from "react";
-import { useAuthToken } from "../AuthTokenContext";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUserInfo } from '../UserInfoContext';
 
 export default function VerifyUser() {
-  const navigate = useNavigate();
-  const { accessToken } = useAuthToken();
+	const navigate = useNavigate();
+	const {userProfile} = useUserInfo();
+	//in this temporary component, we'll call the verify-user endpoint to check if the user exists in our database
+	// useEffect(() => {
+	// 	async function verifyUser() {
+	// 		const user = await verifyAndUpdateUserProfile();
+	// 		console.log(user);
+	// 		console.log(userProfile);
+	// 	}
 
-  useEffect(() => {
-    async function verifyUser() {
-      // make a call to our API to verify the user in our database, if it doesn't exist we'll insert it into our database
-      // finally we'll redirect the user to the /app route
-      const data = await fetch(`${process.env.REACT_APP_API_URL}/verify-user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const user = await data.json();
+	// 	if (accessToken) {
+	// 		verifyUser();
+	// 	}
+	// }, [accessToken, verifyAndUpdateUserProfile]);
 
-      if (user.auth0Id) {
-        navigate("/profile");
-      }
-      else {
-        navigate("/");
-      }
-    }
+  
+	useEffect(() => {
+		if (userProfile?.auth0Id) {
+      console.log(userProfile);
+			navigate('/profile');
+		} 
+	}, [userProfile, navigate]);
 
-    if (accessToken) {
-      verifyUser();
-    }
-
-  }, [accessToken, navigate]);
-
-  return <div className="loading">Loading...</div>;
+	return <div className='loading'>Loading...</div>;
 }

@@ -38,6 +38,7 @@ model User {
   auth0Id     String     @unique
   name        String? // Optional, can be null
   nickname    String? // Optional, can be null
+  picture     String? // Optional, can be null
   bio         String?    @db.Text // Optional, can be null
   create_time DateTime   @default(now())
   update_time DateTime   @updatedAt

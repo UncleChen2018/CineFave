@@ -8,7 +8,7 @@ import UserFavorites from './UserFavorites';
 import { useUserInfo } from '../UserInfoContext'; // Adjust the import path as needed
 
 
-import useUserProfile from '../hooks/useUserProfile';
+
 
 import {
 	Box,
@@ -38,7 +38,7 @@ const favoriteMovies = [
 ];
 
 function ProfilePage() {
-	const [userInfo, setUserInfo] = useUserInfo();
+	const {userProfile, setUserProfile} = useUserInfo();
 	return (
 		<Box padding='4'>
 			<Tabs isFitted variant='enclosed'>
@@ -49,7 +49,7 @@ function ProfilePage() {
 				</TabList>
 				<TabPanels>
 					<TabPanel>
-						<UserOverview userInfo={userInfo}/>
+						<UserOverview userInfo={userProfile}/>
 					</TabPanel>
 					<TabPanel>
 						<UserReviews reviews={userReviews}/>

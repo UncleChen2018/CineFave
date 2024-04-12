@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 function UserOverview({ userInfo }) {
 	const navigate = useNavigate();
+  
 	return (
 		<>
 			<Flex
@@ -58,14 +59,14 @@ function UserOverview({ userInfo }) {
 						variant='filled'
 						resize='none'
 						h={{ base: 'auto', md: '100%' }} // Auto height on base, full height on md and up
-						minH='200px'
+						overflow='auto'
 					/>
 				</Box>
 			</Flex>
 			<Button
 				mt={4}
 				colorScheme='blue'
-				onClick={() => navigate('/editprofile')}
+				onClick={() => navigate('edit', { replace: true})}
 			>
 				Edit Profile
 			</Button>

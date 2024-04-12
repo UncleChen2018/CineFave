@@ -40,10 +40,10 @@ function RequireAuth({ children }) {
 
 	// Otherwise, display the children (the protected page)
 	return (
-		<UserInfoProvider>
+		<>
 			{children}
 			<Outlet /> {/* Render nested routes */}
-		</UserInfoProvider>
+		</>
 	);
 }
 
@@ -59,6 +59,7 @@ root.render(
 			}}
 		>
 			<AuthTokenProvider>
+				<UserInfoProvider>
 				<ChakraProvider theme={theme}>
 					<BrowserRouter>
 						<Box maxW='1280px' w='100%' mx='auto' px={0}>
@@ -77,6 +78,7 @@ root.render(
 						</Box>
 					</BrowserRouter>
 				</ChakraProvider>
+			</UserInfoProvider>
 			</AuthTokenProvider>
 		</Auth0Provider>
 	</React.StrictMode>

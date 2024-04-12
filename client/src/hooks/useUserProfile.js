@@ -7,6 +7,7 @@ export default function useUserProfile() {
   const [userProfile, setUserProfile] = useState([]);
   const { accessToken } = useAuthToken();
 
+  //when the accessToken changes, fetch the user profile from the API
   useEffect(() => {
     async function getUserInfoFromApi() {
       // fetch the user profile from the API, passing the access token in the Authorization header
