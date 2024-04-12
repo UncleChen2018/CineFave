@@ -1,77 +1,55 @@
 import React from 'react';
-import { Button, Box, Flex, Avatar, Text, Textarea } from '@chakra-ui/react';
+import { Button, Box, Flex, Avatar, Text, VStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import CollapsibleMarkdown from './CollapsibleMarkdown';
 
 function UserOverview({ userInfo }) {
-	const navigate = useNavigate();
-  
-	return (
-		<>
-			<Flex
-				direction={{ base: 'column', md: 'row' }} // Stack vertically on small screens, horizontal on medium and up
-				justifyContent='center'
-				minW='80%'
-				w='100%'
-				h='full'
-				wrap='wrap'
-				gap={{ base: 5, md: 0 }} // Add some gap between items when stacked
-				px='5%'
-			>
-				{/* Left Side - User Information */}
-				<Box w={{ base: '100%', md: '30%' }} minW='240px' pr={{ md: 4 }}>
-					<Flex direction='column' gap={2} align='start'>
-						<Box>
-							<Text fontSize='md' color='gray.500'>
-								Avatar:
-							</Text>
-							<Avatar
-								name={userInfo?.nickname || userInfo?.name}
-								src={userInfo?.picture}
-								size='md'
-							/>
-						</Box>
-						<Box>
-							<Text fontSize='md' color='gray.500'>
-								Email:
-							</Text>
-							<Text fontSize='lg'>{userInfo.email}</Text>
-						</Box>
-						<Box>
-							<Text fontSize='md' color='gray.500'>
-								Nickname:
-							</Text>
-							<Text fontSize='lg' fontWeight='bold'>
-								{userInfo.nickname || userInfo.name}
-							</Text>
-						</Box>
-					</Flex>
-				</Box>
+  const navigate = useNavigate();
 
-				{/* Right Side - Bio */}
-				<Box flex={{ base: '1', md: '1' }} minW='240px'>
-					<Text fontSize='md' color='gray.500'>
-						Bio:
-					</Text>
-					<Textarea
-						value={userInfo.bio || 'A Mysterious Member'}
-						isReadOnly
-						placeholder='No bio available'
-						variant='filled'
-						resize='none'
-						h={{ base: 'auto', md: '100%' }} // Auto height on base, full height on md and up
-						overflow='auto'
-					/>
-				</Box>
-			</Flex>
-			<Button
-				mt={4}
-				colorScheme='blue'
-				onClick={() => navigate('edit', { replace: true})}
-			>
-				Edit Profile
-			</Button>
-		</>
-	);
+  return (
+    <Box>
+      {/* Header with user info */}
+      <Flex
+        direction={{ base: 'column', md: 'row' }} // Stack vertically on smaller screens
+        bgGradient="linear(to-r, teal.500, green.500)"
+        color="white"
+        p={{ base: 4, md: 6 }}
+        alignItems="center"
+        justifyContent={{ md: 'space-between' }}
+      >
+        <Avatar
+          name={userInfo?.nickname || userInfo?.name}
+          src={userInfo?.picture}
+          size={{ base: 'lg', md: 'xl' }} // Smaller avatar on smaller screens
+          marginBottom={{ base: 4, md: 0 }} // Add margin-bottom on smaller screens
+        />
+        <VStack align={{ base: 'center', md: 'start' }} spacing={3}>
+          <Text fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" textAlign={{ base: 'center', md: 'left' }}>
+            {userInfo.nickname || userInfo.name}
+          </Text>
+          <Text fontSize={{ base: 'md', md: 'lg' }}>{userInfo.email}</Text>
+          <Text fontSize="md">Member since: {new Date(userInfo.create_time).toLocaleDateString()}</Text>
+        </VStack>
+      </Flex>
+
+      {/* Bio Section */}
+			<Box bg="gray.50" p={4}>
+			<Text fontSize="xl" mb={2}>Bio:</Text>
+			<CollapsibleMarkdown content={userInfo.bio || 'A Mysterious Member'} maxHeight='200px' />
+
+      </Box>
+
+      {/* Edit Profile Button */}
+      <Flex justifyContent={{ base: 'center', md: 'flex-end' }} p={4}>
+        <Button
+          colorScheme="orange"
+          onClick={() => navigate('edit', { replace: true })}
+        >
+          Edit Profile
+        </Button>
+      </Flex>
+    </Box>
+  );
 }
 
 export default UserOverview;

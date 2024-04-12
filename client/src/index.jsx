@@ -16,6 +16,7 @@ import { ChakraProvider, Box, Container } from '@chakra-ui/react';
 import theme from './theme';
 
 import NotFound from './components/NotFound';
+import NotAuthorizedPage from './components/NotAuthorizedPage';
 import Home from './components/Home';
 import Header from './components/Header';
 import AppLayout from './components/AppLayout';
@@ -30,22 +31,15 @@ const root = ReactDOMClient.createRoot(container);
 
 const requestedScopes = ['profile', 'email'];
 
-function RequireAuth({ children }) {
-	const { isAuthenticated, isLoading } = useAuth0();
+const RequireAuth = () => {
+  const { isAuthenticated, isLoading } = useAuth0();
 
-	// If the user is not authenticated, redirect to the home page
-	if (!isLoading && !isAuthenticated) {
-		return <Navigate to='/' replace />;
-	}
+  if (isLoading) {
+    return <div>Loading...</div>; // Or some loading indicator
+  }
 
-	// Otherwise, display the children (the protected page)
-	return (
-		<>
-			{children}
-			<Outlet /> {/* Render nested routes */}
-		</>
-	);
-}
+  return isAuthenticated ? <Outlet /> : <Navigate to="/not-authorized" replace />;
+};
 
 root.render(
 	<React.StrictMode>
@@ -72,8 +66,11 @@ root.render(
 									<Route index element={<ProfilePage />} />
 									<Route path='edit' element={<EditProfilePage />} />
 									<Route path='auth_debugger' element={<AuthDebugger />} />
+									
 								</Route>
+								<Route path="/not-authorized" element={<NotAuthorizedPage />} />
 								<Route path='*' element={<NotFound />} />
+								
 							</Routes>
 						</Box>
 					</BrowserRouter>

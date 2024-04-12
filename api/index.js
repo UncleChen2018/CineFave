@@ -5,6 +5,7 @@ import pkg from '@prisma/client';
 import morgan from 'morgan';
 import cors from 'cors';
 import { auth } from 'express-oauth2-jwt-bearer';
+import { c } from 'tar';
 
 // this is a middleware that will validate the access token sent by the client
 const requireAuth = auth({
@@ -80,7 +81,6 @@ app.get('/userProfile', requireAuth, async (req, res) => {
 		},
 	});
 
-  console.log(user);
 
 	res.json(user);
 });
@@ -89,6 +89,8 @@ app.get('/userProfile', requireAuth, async (req, res) => {
 app.put('/userProfile', requireAuth, async (req, res) => {
 	const auth0Id = req.auth.payload.sub;
 	const { nickname, bio } = req.body;
+  console.log(nickname);
+  console.log(bio);
 
 	// Initialize an empty object to hold fields to update
 	let updateData = {};

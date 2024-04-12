@@ -1,6 +1,4 @@
 import React,{useContext} from 'react';
-import { Routes, Route, NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import {useAuth0 } from "@auth0/auth0-react";
 import UserOverview from './UserOverview';
 import UserReviews from './UserReviews';
 import UserFavorites from './UserFavorites';
@@ -16,10 +14,7 @@ import {
 	TabList,
 	TabPanels,
 	Tab,
-	TabPanel,
-	Text,
-	VStack,
-	SimpleGrid,
+	TabPanel
 } from '@chakra-ui/react';
 
 

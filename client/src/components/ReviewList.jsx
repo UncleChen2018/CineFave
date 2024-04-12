@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
+import CollapsibleMarkdown from './CollapsibleMarkdown';
 
 
 function ReviewList({ title, reviews }) {
@@ -59,7 +60,7 @@ function ReviewList({ title, reviews }) {
 							</HStack>
 						</VStack>
 					</HStack>
-					<CollapsibleMarkdown content={review.content} />
+					<CollapsibleMarkdown content={review.content} maxHeight='100px' />
 					{/* Add more review details here */}
 				</Box>
 			))}
@@ -67,82 +68,82 @@ function ReviewList({ title, reviews }) {
 	);
 }
 
-function CollapsibleMarkdown({ content }) {
-	const [isCollapsed, setIsCollapsed] = useState(true);
-	const [isContentOverflowing, setIsContentOverflowing] = useState(false);
-	const contentRef = useRef(null); // Create a ref for the markdown content
+// function CollapsibleMarkdown({ content }) {
+// 	const [isCollapsed, setIsCollapsed] = useState(true);
+// 	const [isContentOverflowing, setIsContentOverflowing] = useState(false);
+// 	const contentRef = useRef(null); // Create a ref for the markdown content
 
-	useEffect(() => {
-		// Check the content height and determine if it overflows
-		const checkContentOverflow = () => {
-			const current = contentRef.current;
-			if (current) {
-				// Compare the scrollHeight (actual height) with the clientHeight (visible height)
-				const isOverflowing = current.scrollHeight > current.clientHeight;
-				setIsContentOverflowing(isOverflowing);
-			}
-		};
+// 	useEffect(() => {
+// 		// Check the content height and determine if it overflows
+// 		const checkContentOverflow = () => {
+// 			const current = contentRef.current;
+// 			if (current) {
+// 				// Compare the scrollHeight (actual height) with the clientHeight (visible height)
+// 				const isOverflowing = current.scrollHeight > current.clientHeight;
+// 				setIsContentOverflowing(isOverflowing);
+// 			}
+// 		};
 
-		// Run the check after the component mounts
-		checkContentOverflow();
-		// Add resize listener to handle window resizing
-		window.addEventListener('resize', checkContentOverflow);
+// 		// Run the check after the component mounts
+// 		checkContentOverflow();
+// 		// Add resize listener to handle window resizing
+// 		window.addEventListener('resize', checkContentOverflow);
 
-		// Clean up listener to prevent memory leaks
-		return () => {
-			window.removeEventListener('resize', checkContentOverflow);
-		};
-	}, []); // Empty dependency array ensures this effect runs only once after mount
+// 		// Clean up listener to prevent memory leaks
+// 		return () => {
+// 			window.removeEventListener('resize', checkContentOverflow);
+// 		};
+// 	}, []); // Empty dependency array ensures this effect runs only once after mount
 
-	return (
-		<Box m='2' p='2'>
-			<Box
-				ref={contentRef} // Attach the ref to the Box
-				maxHeight={isCollapsed ? '200px' : 'none'} // Set the maxHeight only when collapsed
-				overflow='hidden'
-				position='relative'
-			>
-				<ReactMarkdown
-					components={{
-						// Wrap text and break words to prevent overflow
-						p: ({ node, ...props }) => (
-							<Text {...props} wordBreak='break-word' />
-						),
-						// Make images responsive
-						img: ({ node, ...props }) => <Image {...props} maxW='100%' />,
-						// Handle code blocks or preformatted text
-						code: ({ node, ...props }) => (
-							<Box as='code' {...props} overflowX='auto' />
-						),
-						pre: ({ node, ...props }) => (
-							<Box
-								as='pre'
-								{...props}
-								overflowX='auto'
-								whiteSpace='pre-wrap'
-								wordBreak='break-word'
-							/>
-						),
-						// Add other components as needed
-					}}
-				>
-					{content}
-				</ReactMarkdown>
-			</Box>
-			{isContentOverflowing && isCollapsed && (
-				<Text
-					as='span'
-					onClick={() => setIsCollapsed(false)}
-					color='blue.500'
-					_hover={{ textDecoration: 'underline', cursor: 'pointer' }}
-					display='block'
-					textAlign='right'
-				>
-					View More
-				</Text>
-			)}
-		</Box>
-	);
-}
+// 	return (
+// 		<Box m='2' p='2'>
+// 			<Box
+// 				ref={contentRef} // Attach the ref to the Box
+// 				maxHeight={isCollapsed ? '200px' : 'none'} // Set the maxHeight only when collapsed
+// 				overflow='hidden'
+// 				position='relative'
+// 			>
+// 				<ReactMarkdown
+// 					components={{
+// 						// Wrap text and break words to prevent overflow
+// 						p: ({ node, ...props }) => (
+// 							<Text {...props} wordBreak='break-word' />
+// 						),
+// 						// Make images responsive
+// 						img: ({ node, ...props }) => <Image {...props} maxW='100%' />,
+// 						// Handle code blocks or preformatted text
+// 						code: ({ node, ...props }) => (
+// 							<Box as='code' {...props} overflowX='auto' />
+// 						),
+// 						pre: ({ node, ...props }) => (
+// 							<Box
+// 								as='pre'
+// 								{...props}
+// 								overflowX='auto'
+// 								whiteSpace='pre-wrap'
+// 								wordBreak='break-word'
+// 							/>
+// 						),
+// 						// Add other components as needed
+// 					}}
+// 				>
+// 					{content}
+// 				</ReactMarkdown>
+// 			</Box>
+// 			{isContentOverflowing && isCollapsed && (
+// 				<Text
+// 					as='span'
+// 					onClick={() => setIsCollapsed(false)}
+// 					color='blue.500'
+// 					_hover={{ textDecoration: 'underline', cursor: 'pointer' }}
+// 					display='block'
+// 					textAlign='right'
+// 				>
+// 					View More
+// 				</Text>
+// 			)}
+// 		</Box>
+// 	);
+// }
 
 export default ReviewList;

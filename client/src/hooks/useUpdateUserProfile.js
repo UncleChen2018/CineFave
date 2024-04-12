@@ -1,14 +1,14 @@
-// useUpdateUserProfile.js
-
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useAuthToken } from "../AuthTokenContext";
+import { useUserInfo } from "../UserInfoContext";
 
 export default function useUpdateUserProfile() {
   const { accessToken } = useAuthToken();
+  const { userProfile, setUserProfile } = useUserInfo();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const updateUserProfile = useCallback(async (updatedProfile) => {
+  async function updateUserProfile(updatedProfile) {
     setIsLoading(true);
     setError(null);
 
@@ -26,16 +26,14 @@ export default function useUpdateUserProfile() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const updatedData = await response.json();
-      // Assuming you might want to do something with the updated user data, like displaying a success message or logging.
-      console.log('User successfully updated:', updatedData);
+      const data = await response.json();
+      setUserProfile(data); // Update context with the new user profile data
     } catch (error) {
-      console.error('Updating user profile failed:', error);
-      setError(error);
+      setError(error.message || 'Failed to update profile');
     } finally {
       setIsLoading(false);
     }
-  }, [accessToken]);
+  }
 
   return { updateUserProfile, isLoading, error };
 }

@@ -1,22 +1,37 @@
-import React, { useState } from 'react';
-import { Box, Button, Flex, Input, Textarea,Text } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import { Box, Button, Flex, Input, Textarea,Text, HStack } from '@chakra-ui/react';
 import { useUserInfo } from '../UserInfoContext'; // Import our context hook
 import { useNavigate } from 'react-router-dom';
+
+
+import MarkdownEditor from './MarkdownEditor';
 import useUpdateUserProfile from '../hooks/useUpdateUserProfile';
 
 const EditProfile = () => {
-  const { userInfo, userProfile,setUserProfile } = useUserInfo();  // Get the userInfo from the context
+
+  const { userProfile } = useUserInfo();  // Get the userInfo from the context
 
   const { updateUserProfile, isLoading, error } = useUpdateUserProfile();
-  const [localUserInfo, setLocalUserInfo] = useState({ ...userInfo });
+  const [bio, setBio] = useState(userProfile.bio);
+  const [nickname, setNickname] = useState(userProfile.nickname);
+
+  useEffect(() => {
+    setBio(userProfile.bio);
+    setNickname(userProfile.nickname);
+  }, [userProfile]);
+  
 
   const navigate = useNavigate();
 
+
+
   const handleSave = () => {
-    setUserProfile(...userProfile, localUserInfo);
-    // Here you would also call your API to update the userInfo on the backend
-    updateUserProfile(localUserInfo); // Call the hook to update the user profile
+    updateUserProfile({...userProfile,nickname,bio}); // Call the hook to update the user profile
     navigate('/profile'); // Navigate back to the profile page after saving
+  };
+
+  const handleCancel = () => {
+    navigate('/profile'); // Navigate back without saving any changes
   };
 
   return (
@@ -24,20 +39,26 @@ const EditProfile = () => {
       <Box>
         <Text fontSize="md" color="gray.500">Nickname:</Text>
         <Input
-          value={localUserInfo.nickname}
-          onChange={(e) => setLocalUserInfo({ ...localUserInfo, nickname: e.target.value })}
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
         />
       </Box>
-      <Box>
+      <Box maxW='80%'>
         <Text fontSize="md" color="gray.500">Bio:</Text>
-        <Textarea
-          value={localUserInfo.bio}
-          onChange={(e) => setLocalUserInfo({ ...localUserInfo, bio: e.target.value })}
+        <MarkdownEditor
+          initialText={bio}
+          onChange={setBio}
         />
       </Box>
-      <Button mt={4} colorScheme="blue" onClick={handleSave}>
-        Save Changes
+      <HStack align='center' mt={4}>
+      <Button mr='20px' colorScheme="blue" onClick={handleSave}>
+        Save
       </Button>
+      <Button colorScheme="orange" onClick={handleCancel}>
+          Cancel
+        </Button>
+
+        </HStack>
     </Flex>
   );
 };
