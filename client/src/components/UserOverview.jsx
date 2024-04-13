@@ -28,7 +28,7 @@ function UserOverview({ userInfo }) {
             {userInfo.nickname || userInfo.name}
           </Text>
           <Text fontSize={{ base: 'md', md: 'lg' }}>{userInfo.email}</Text>
-          <Text fontSize="md">Member since: {new Date(userInfo.create_time).toLocaleDateString()}</Text>
+          <Text fontSize="md">Member since: {new Date(userInfo.createTime).toLocaleDateString()}</Text>
         </VStack>
       </Flex>
 

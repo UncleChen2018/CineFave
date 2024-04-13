@@ -1,23 +1,11 @@
-import React,{useContext} from 'react';
+import React, { useContext } from 'react';
 import UserOverview from './UserOverview';
 import UserReviews from './UserReviews';
 import UserFavorites from './UserFavorites';
 
 import { useUserInfo } from '../UserInfoContext'; // Adjust the import path as needed
 
-
-
-
-import {
-	Box,
-	Tabs,
-	TabList,
-	TabPanels,
-	Tab,
-	TabPanel
-} from '@chakra-ui/react';
-
-
+import { Text, Box, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 
 const userReviews = [
 	{
@@ -33,9 +21,14 @@ const favoriteMovies = [
 ];
 
 function ProfilePage() {
-	const {userProfile, setUserProfile} = useUserInfo();
+	const { userProfile, setUserProfile, favorites } = useUserInfo();
+
 	return (
 		<Box padding='4'>
+			{/* <Text fontSize='lg' fontWeight='bold' whiteSpace='pre-wrap'>
+				{JSON.stringify(favorites, null, 2)}
+				{JSON.stringify(userProfile, null, 2)}
+			</Text> */}
 			<Tabs isFitted variant='enclosed'>
 				<TabList mb='1em'>
 					<Tab>Overview</Tab>
@@ -44,13 +37,13 @@ function ProfilePage() {
 				</TabList>
 				<TabPanels>
 					<TabPanel>
-						<UserOverview userInfo={userProfile}/>
+						<UserOverview userInfo={userProfile} />
 					</TabPanel>
 					<TabPanel>
-						<UserReviews reviews={userReviews}/>
+						<UserReviews reviews={userReviews} />
 					</TabPanel>
 					<TabPanel>
-						<UserFavorites favorites={favoriteMovies}/>
+						<UserFavorites favorites={favorites} />
 					</TabPanel>
 				</TabPanels>
 			</Tabs>
