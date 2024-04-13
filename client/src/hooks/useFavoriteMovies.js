@@ -1,7 +1,6 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useAuthToken } from '../AuthTokenContext';
 
-// Hook to fetch all favorite movies
 export function useFetchFavorites() {
     const { accessToken } = useAuthToken();
     const [favorites, setFavorites] = useState([]);
@@ -9,15 +8,23 @@ export function useFetchFavorites() {
     const [error, setError] = useState(null);
 
     async function fetchFavorites() {
+        if (!accessToken) {
+            setError('Access token is missing');
+            return;
+        }
+
         setIsLoading(true);
+        const url = `${process.env.REACT_APP_API_URL}/favorites`;
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/favorites`, {
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
             });
-            if (!response.ok) throw new Error('Failed to fetch favorites');
+            if (!response.ok) {
+                throw new Error('Failed to fetch favorites');
+            }
             const data = await response.json();
             setFavorites(data);
         } catch (error) {
@@ -29,6 +36,8 @@ export function useFetchFavorites() {
 
     return { favorites, fetchFavorites, isLoading, error };
 }
+
+
 
 // Hook to check favorites status for a list of movies
 export function useFavoritesStatus() {

@@ -3,6 +3,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import React, { useRef, useEffect, useState } from 'react';
 import MovieCard from './MovieCard'; // Adjust the import path as necessary
 
+
 export default function MovieCarousel({ movies, w }) {
 	const scrollContainer = useRef(null);
 	// Call useBreakpointValue at the top level of your component

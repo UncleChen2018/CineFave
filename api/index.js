@@ -139,12 +139,6 @@ async function requireAuthUser(req, res, next) {
 			return res.status(404).json({ error: 'User not found' });
 		}
 
-		// Validate query userId against the authenticated userId
-		const queryUserId = parseInt(req.query.userId);
-
-		if (!queryUserId || queryUserId !== user.id) {
-			return res.status(403).json({ error: 'Unmatched user id' });
-		}
 		// Attach userId to the request for downstream use
 		req.userId = user.id;
 		next();
