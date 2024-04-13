@@ -8,40 +8,43 @@ datasource db {
 }
 
 model Favorite {
-  user_id     Int
-  movie_id    Int
-  create_time DateTime @default(now())
-  user        User     @relation(fields: [user_id], references: [id])
+  userId     Int     @map("user_id")
+  movieId    Int      @map("movie_id")
+  createTime DateTime @default(now()) @map("create_time")
+  user        User     @relation(fields: [userId], references: [id])
 
-  @@id([user_id, movie_id]) // Composite primary key
+  @@id([userId, movieId]) // Composite primary key
   @@map("favorite")
 }
 
 model Review {
   id          Int      @id @default(autoincrement())
-  user_id     Int
-  movie_id    Int
+  userId      Int      @map("user_id")
+  movieId     Int      @map("movie_id")
   title       String?  @db.VarChar(255)
   content     String?  @db.Text
-  rate        Float?   @db.Float
-  status      Int      @default(0) // 0: valid, 1: invalid 2: deleted  
-  create_time DateTime @default(now())
-  update_time DateTime @db.DateTime(0)
-  user        User     @relation(fields: [user_id], references: [id])
+  rate        Float?
+  status      Int      @default(0) // 0: valid, 1: invalid, 2: deleted  
+  createTime  DateTime @default(now()) @map("create_time")
+  updateTime  DateTime @updatedAt @map("update_time")
+  user        User     @relation(fields: [userId], references: [id])
 
   @@map("review")
 }
 
+
+
+
 model User {
   id          Int        @id @default(autoincrement())
   email       String     @unique
-  auth0Id     String     @unique
-  name        String? // Optional, can be null
-  nickname    String? // Optional, can be null
-  picture     String? // Optional, can be null
-  bio         String?    @db.Text // Optional, can be null
-  create_time DateTime   @default(now())
-  update_time DateTime   @updatedAt
+  auth0Id     String     @unique @map("auth0_id")
+  name        String?    @map("name") // Optional, can be null
+  nickname    String?    @map("nickname") // Optional, can be null
+  picture     String?    @map("picture") // Optional, can be null
+  bio         String?    @db.Text @map("bio") // Optional, can be null
+  createTime  DateTime   @default(now()) @map("create_time")
+  updateTime  DateTime   @updatedAt @map("update_time")
   favorites   Favorite[]
   reviews     Review[]
 

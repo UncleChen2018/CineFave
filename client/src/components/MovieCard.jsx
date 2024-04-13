@@ -7,6 +7,7 @@ import {
 	CircularProgressLabel,
 	IconButton,
 	Text,
+	Tooltip,
 } from '@chakra-ui/react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
@@ -89,10 +90,11 @@ export default function MovieCard({ movie, w }) {
 					direction='column'
 					justifyContent='center' // This will center the content vertically
 					height='3rem' // Set a fixed height large enough to contain one or two lines
-				>
+				><Tooltip label={title} placement="top" hasArrow>
 					<Text fontWeight='semibold' as='h4' lineHeight='tight' noOfLines={2}>
 						{title}
 					</Text>
+					</Tooltip>
 				</Flex>
 				<Text color='gray.500' fontSize='sm'>
 					{releaseDate}
