@@ -19,6 +19,19 @@ export default function Header() {
 	const { isAuthenticated, loginWithRedirect, user, isLoading, logout } =
 		useAuth0();
 
+		
+
+  const handleLogin = () => {
+    // Save the current page in local storage
+    localStorage.setItem('lastPage', window.location.pathname);
+
+    // Redirect to login
+    loginWithRedirect({
+      // Optionally set the redirectUri dynamically
+      redirectUri: `${window.location.origin}/verify-user`
+    });
+  };
+
 	const bg = useColorModeValue('blue.500', 'blue.800'); // Light mode: blue.500, dark mode: blue.800
 	const color = useColorModeValue('white', 'gray.200'); // Light mode: white text, dark mode: slightly darker text
 	const isMobile = useBreakpointValue({ base: true, md: false }); // If the screen is smaller than 48em, isMobile is true
@@ -61,7 +74,7 @@ export default function Header() {
 				<LoginMenu
 					isAuthenticated={isAuthenticated}
 					user={user}
-					login={loginWithRedirect}
+					login={handleLogin}
 					logout={logout}
 				/>
 			</Box>
