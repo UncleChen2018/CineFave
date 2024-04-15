@@ -7,11 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model FavMovie {
+  id          Int       @id
+  title       String?
+  releaseDate DateTime? @map("release_date")
+  rating      Float?    @map("rating")
+  imageUrl    String?   @map("image_url")   // Already optional
+
+  favorites   Favorite[]
+
+  @@map("fav_movie")
+}
+
+
 model Favorite {
-  userId     Int     @map("user_id")
-  movieId    Int      @map("movie_id")
+  userId     Int      @map("user_id")
+  movieId    Int      @map("movie_id") // Keep original column name
   createTime DateTime @default(now()) @map("create_time")
-  user        User     @relation(fields: [userId], references: [id])
+
+  user       User      @relation(fields: [userId], references: [id])
+  favMovie   FavMovie  @relation(fields: [movieId], references: [id]) // Relation to FavMovie
 
   @@id([userId, movieId]) // Composite primary key
   @@map("favorite")

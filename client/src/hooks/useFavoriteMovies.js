@@ -39,6 +39,7 @@ export function useFetchFavorites() {
 
 
 
+// if favorite has already been loaded to the context, no need fetch again
 // Hook to check favorites status for a list of movies
 export function useFavoritesStatus() {
     const { accessToken } = useAuthToken();

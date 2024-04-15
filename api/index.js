@@ -173,6 +173,77 @@ app.get('/favorites', requireAuth, requireAuthUser, async (req, res) => {
 	}
 });
 
+
+app.post('/toggleFavorite/:movieId', requireAuth, requireAuthUser, async (req, res) => {
+	const userId = req.userId; // Assuming requireAuthUser sets req.userId
+	const { movieId } = req.params;
+	const movieDetails = req.body.movie; // Assuming movie details are sent in the request body
+	console.log('from toggleFavorite:', userId, movieId, movieDetails);
+
+	try {
+			// Check if the movie is already in FavMovie table
+			let favMovie = await prisma.favMovie.upsert({
+					where: {
+							id: parseInt(movieId),
+					},
+					update: {
+						title: movieDetails.title,
+						releaseDate: movieDetails.releaseDate ? new Date(movieDetails.releaseDate) : undefined,
+						rating: movieDetails.rating ? parseFloat(movieDetails.rating) : undefined,
+						imageUrl: movieDetails.imageUrl,
+					},
+					create: {
+						id: parseInt(movieId),
+						title: movieDetails.title,
+						releaseDate: new Date(movieDetails.releaseDate),
+						rating: parseFloat(movieDetails.rating),
+						imageUrl: movieDetails.imageUrl,
+					},
+			});
+
+		
+			const favorite = await prisma.favorite.findUnique({
+					where: {
+							userId_movieId: {
+									userId: userId,
+									movieId: parseInt(movieId),
+							},
+					},
+			});
+
+			let response;
+			// If it's a favorite, remove it, else add it
+			if (favorite) {
+					await prisma.favorite.delete({
+							where: {
+									userId_movieId: {
+											userId: userId,
+											movieId: parseInt(movieId),
+									},
+							},
+					});
+					response = { message: 'Favorite removed', movieId, favorited: false };
+			} else {
+					await prisma.favorite.create({
+							data: {
+									userId: userId,
+									movieId: favMovie.id, // Use the id from FavMovie
+							},
+					});
+					response = { message: 'Favorite added', movieId, favorited: true };
+			}
+
+			res.json(response);
+	} catch (error) {
+			console.error('Failed to toggle favorite:', error);
+			res.status(500).json({ error: 'Internal server error' });
+	}
+});
+
+
+
+
+// might not need this endpoint
 //get the status for a list of movies if they are in the user's favorite list
 app.post('/favoritesStatus', requireAuth, async (req, res) => {
 	const auth0Id = req.auth.payload.sub;
@@ -195,45 +266,7 @@ app.post('/favoritesStatus', requireAuth, async (req, res) => {
 	res.json(favoriteMovieIds);
 });
 
-// add the movie id to the user's favorite list
-app.post('/addFavorite', requireAuth, async (req, res) => {
-	const auth0Id = req.auth.payload.sub;
-	const { movieId } = req.body;
 
-	try {
-		const favorite = await prisma.favorite.create({
-			data: {
-				userId: auth0Id,
-				movieId,
-			},
-		});
-
-		res.json(favorite);
-	} catch (error) {
-		console.error('Failed to add favorite:', error);
-		res.status(500).json({ error: 'Internal server error' });
-	}
-});
-
-// remove the movie id from the user's favorite list
-app.delete('/removeFavorite', requireAuth, async (req, res) => {
-	const auth0Id = req.auth.payload.sub;
-	const { movieId } = req.body;
-
-	try {
-		await prisma.favorite.deleteMany({
-			where: {
-				userId: auth0Id,
-				movieId,
-			},
-		});
-
-		res.json({ message: 'Favorite removed' });
-	} catch (error) {
-		console.error('Failed to remove favorite:', error);
-		res.status(500).json({ error: 'Internal server error' });
-	}
-});
 
 // Table review
 

@@ -25,10 +25,10 @@ function ProfilePage() {
 
 	return (
 		<Box padding='4'>
-			{/* <Text fontSize='lg' fontWeight='bold' whiteSpace='pre-wrap'>
+			<Text fontSize='lg' fontWeight='bold' whiteSpace='pre-wrap'>
 				{JSON.stringify(favorites, null, 2)}
 				{JSON.stringify(userProfile, null, 2)}
-			</Text> */}
+			</Text>
 			<Tabs isFitted variant='enclosed'>
 				<TabList mb='1em'>
 					<Tab>Overview</Tab>

@@ -13,7 +13,7 @@ import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { ratingToColor } from '../utilities';
 
-
+import useToggleFavorite from '../hooks/useToggleFavorite';
 
 export default function MovieCard({ movie, w }) {
 	const { id, title, releaseDate, imageUrl, rating, isLiked } = movie;
@@ -24,6 +24,7 @@ export default function MovieCard({ movie, w }) {
 		navigate(`/movie/${id}`);
 	};
 
+	
 	return (
 		<Box
 			maxW='sm'
@@ -70,6 +71,7 @@ export default function MovieCard({ movie, w }) {
 							<AiOutlineHeart size='1.25em' />
 						)
 					}
+
 					variant='ghost'
 					isRound={true}
 					pos='absolute'
