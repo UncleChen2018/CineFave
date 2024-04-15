@@ -320,16 +320,20 @@ app.post(
 		const { movieId } = req.params;
 		const reviewData = req.body;
 		console.log('from reviews:', userId, movieId, reviewData);
-		if (!reviewData||!reviewData.content || reviewData.content.trim() === '') {
+		if (
+			!reviewData ||
+			!reviewData.content ||
+			reviewData.content.trim() === ''
+		) {
 			return res.status(400).json({ error: 'Review content is required' });
 		}
 
 		try {
 			const review = await prisma.review.create({
 				data: {
-					title: reviewData.title?.trim() || 'Review by CineFav User',
+					title: reviewData.title?.trim(),
 					content: reviewData.content,
-					rating: reviewData.rating?parseFloat(reviewData.rating): 0.6,
+					rating: reviewData.rating ? parseFloat(reviewData.rating) : 0.6,
 					userId,
 					movieId: parseInt(movieId),
 				},
@@ -351,14 +355,19 @@ app.get('/reviews/:movieId', async (req, res) => {
 		const reviews = await prisma.review.findMany({
 			where: {
 				movieId: parseInt(movieId),
+				status: 0, // assuming we only want to fetch reviews with status 'valid'
 			},
 			include: {
 				user: {
 					select: {
+						name: true,
 						nickname: true,
 						picture: true,
 					},
 				},
+			},
+			orderBy: {
+				createTime: 'desc',
 			},
 		});
 

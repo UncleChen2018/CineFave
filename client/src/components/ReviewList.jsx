@@ -9,13 +9,21 @@ import {
 	Tag,
 	TagLabel,
 	TagLeftIcon,
+	Button,
 } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
 import CollapsibleMarkdown from './CollapsibleMarkdown';
 
+function ReviewList({ title, reviews, type }) {
+	const handleEdit = (reviewId) => {
+		// Logic to handle editing a review
+	};
 
-function ReviewList({ title, reviews }) {
+	const handleDelete = (reviewId) => {
+		// Logic to handle deleting a review
+	};
+
 	if (!reviews || reviews.length === 0) {
 		return (
 			<VStack align='start' spacing={8} my={10}>
@@ -39,14 +47,16 @@ function ReviewList({ title, reviews }) {
 							<Image
 								borderRadius='full'
 								boxSize='50px'
-								src={`https://image.tmdb.org/t/p/original${review.author_details.avatar_path}`}
+								src={review.author_details.avatar_path}
 								alt={`Avatar of ${review.author}`}
 							/>
 						) : (
 							<Box borderRadius='full' boxSize='50px' bg='gray.200' />
 						)}
 						<VStack align='start'>
-							<Text fontWeight='bold'>{review.author}</Text>
+							<Text fontWeight='bold'>
+								{review.title || `Review from ${review.author}`}
+							</Text>
 							<HStack>
 								{review.author_details.rating && (
 									<Tag colorScheme='blackAlpha' borderRadius='full'>
@@ -55,19 +65,41 @@ function ReviewList({ title, reviews }) {
 									</Tag>
 								)}
 								<Text fontSize='sm'>
-									Written on {new Date(review.created_at).toLocaleDateString()}
+									By {review.author_details.username || 'Anonymous'}
+								</Text>
+								<Text fontSize='sm'>
+									Written on{' '}
+									{new Date(review.created_at).toLocaleString(undefined, {
+										day: 'numeric',
+										month: 'long',
+										year: 'numeric',
+										hour: '2-digit',
+										minute: '2-digit',
+									})}
 								</Text>
 							</HStack>
 						</VStack>
 					</HStack>
 					<CollapsibleMarkdown content={review.content} maxHeight='100px' />
 					{/* Add more review details here */}
+					{review.isAuthor && (
+						<HStack spacing={4}>
+							<Button size='sm' onClick={() => handleEdit(review.id)}>
+								Edit
+							</Button>
+							<Button
+								size='sm'
+								colorScheme='red'
+								onClick={() => handleDelete(review.id)}
+							>
+								Delete
+							</Button>
+						</HStack>
+					)}
 				</Box>
 			))}
 		</VStack>
 	);
 }
-
-
 
 export default ReviewList;

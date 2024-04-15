@@ -52,7 +52,7 @@ const Rating = ({
 	);
 };
 
-const ReviewForm = ({ movieId, onClose }) => {
+const ReviewForm = ({ movieId, onClose, onSuccess }) => {
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState('');
 
@@ -96,6 +96,7 @@ const ReviewForm = ({ movieId, onClose }) => {
 				isClosable: true,
 			});
       onClose();
+			onSuccess();
 		}
 	};
 
