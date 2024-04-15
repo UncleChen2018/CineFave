@@ -20,7 +20,7 @@ const CollapsibleMarkdown = ({ content, maxHeight = '200px' }) => {
   }, []);
 
   return (
-    <Box m='2' p='2'>
+    <Box mt='2'>
       <Box
         ref={contentRef}
         maxHeight={isCollapsed ? maxHeight : 'none'}
