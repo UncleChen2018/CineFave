@@ -18,7 +18,7 @@ export default function useAddReview() {
     }
 
     setIsSubmitting(true);
-    const url = `${process.env.REACT_APP_API_URL}/reviews/${movieId}`; // Adjust the URL to your API's endpoint
+    const url = `${process.env.REACT_APP_API_URL}/movies/${movieId}/reviews`; // Adjust the URL to your API's endpoint
 
     try {
       const response = await fetch(url, {

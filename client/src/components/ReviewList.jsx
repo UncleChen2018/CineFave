@@ -16,14 +16,11 @@ import { FaStar } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
 import CollapsibleMarkdown from './CollapsibleMarkdown';
 
-function ReviewList({ title, reviews, type }) {
+function ReviewList({ title, reviews, handleDelete }) {
 	const handleEdit = (reviewId) => {
 		// Logic to handle editing a review
 	};
 
-	const handleDelete = (reviewId) => {
-		// Logic to handle deleting a review
-	};
 
 	if (!reviews || reviews.length === 0) {
 		return (
@@ -74,13 +71,10 @@ function ReviewList({ title, reviews, type }) {
         </HStack>
         <Text fontSize='sm'>
           Written on{' '}
-          {new Date(review.created_at).toLocaleString(undefined, {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-          })}
+					{formatDate(review.created_at)}
+          {review.updated_at !== review.created_at &&
+						` (Updated on ${formatDate(review.updated_at)})`
+					}
         </Text>
       </VStack>
       <CollapsibleMarkdown content={review.content} maxHeight='100px' />
@@ -104,5 +98,17 @@ function ReviewList({ title, reviews, type }) {
 </VStack>
 	);
 }
+
+
+function formatDate(dateString) {
+	return new Date(dateString).toLocaleString(undefined, {
+			day: 'numeric',
+			month: 'long',
+			year: 'numeric',
+			hour: '2-digit',
+			minute: '2-digit',
+	});
+}
+
 
 export default ReviewList;

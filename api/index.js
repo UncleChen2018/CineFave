@@ -150,7 +150,7 @@ async function requireAuthUser(req, res, next) {
 	}
 }
 
-// Table favorite
+// API for favorite movies
 // get the list of favorite movies for the authenticated user
 app.get('/favorites', requireAuth, requireAuthUser, async (req, res) => {
 	console.log('from favorites:', req.userId);
@@ -309,10 +309,10 @@ app.post('/favoritesStatus', requireAuth, async (req, res) => {
 	res.json(favoriteMovieIds);
 });
 
-// Table review
+// API of movies' reviews
 // post a review for a movie
 app.post(
-	'/reviews/:movieId',
+	'/movies/:movieId/reviews',
 	requireAuth,
 	requireAuthUser,
 	async (req, res) => {
@@ -348,7 +348,7 @@ app.post(
 );
 
 // get the list of reviews for a movie
-app.get('/reviews/:movieId', async (req, res) => {
+app.get('/movies/:movieId/reviews', async (req, res) => {
 	const { movieId } = req.params;
 
 	try {
@@ -375,6 +375,103 @@ app.get('/reviews/:movieId', async (req, res) => {
 	} catch (error) {
 		console.error('Failed to fetch reviews:', error);
 		res.status(500).json({ error: 'Failed to fetch reviews' });
+	}
+});
+
+// API of reviews
+// Update a review by review ID
+app.put(
+	'/reviews/:reviewId',
+	requireAuth,
+	requireAuthUser,
+	async (req, res) => {
+		const { reviewId } = req.params;
+		const userId = req.userId; // Set by requireAuthUser middleware
+		const { title, content, rating } = req.body;
+
+		try {
+			const review = await prisma.review.findUnique({
+				where: {
+					id: parseInt(reviewId),
+					status: 0, // assuming we only want to fetch reviews with status 'valid'
+				},
+			});
+
+			if (!review || review.userId !== userId) {
+				return res
+					.status(403)
+					.json({ error: 'You do not have permission to update this review.' });
+			}
+
+			const updatedReview = await prisma.review.update({
+				where: {
+					id: parseInt(reviewId),
+				},
+				data: {
+					title: title?.trim(),
+					content,
+					rating: parseFloat(rating),
+				},
+			});
+			res.json(updatedReview);
+		} catch (error) {
+			console.error('Failed to update review:', error);
+			res.status(500).json({ error: 'Failed to update review' });
+		}
+	}
+);
+
+// Delete a review by review ID
+app.delete(
+	'/reviews/:reviewId',
+	requireAuth,
+	requireAuthUser,
+	async (req, res) => {
+		const { reviewId } = req.params;
+		const userId = req.userId; // Set by requireAuthUser middleware
+
+		try {
+			const review = await prisma.review.findUnique({
+				where: { id: parseInt(reviewId) },
+			});
+
+			if (!review || review.userId !== userId) {
+				return res
+					.status(403)
+					.json({ error: 'You do not have permission to delete this review.' });
+			}
+
+			const deletedReview = await prisma.review.update({
+				where: {
+					id: parseInt(reviewId),
+				},
+				data: {
+					status: 1, // Soft delete by updating the status to deleted by user
+				},
+			});
+			res.json(deletedReview);
+		} catch (error) {
+			console.error('Failed to delete review:', error);
+			res.status(500).json({ error: 'Failed to delete review' });
+		}
+	}
+);
+
+// Get all reviews published by the authenticated user
+app.get('/user/reviews', requireAuth, requireAuthUser, async (req, res) => {
+	const userId = req.userId; // Set by requireAuthUser middleware
+
+	try {
+		const reviews = await prisma.review.findMany({
+			where: {
+				userId: userId,
+				status: 0, // Only fetch reviews that are not deleted
+			},
+		});
+		res.json(reviews);
+	} catch (error) {
+		console.error('Failed to get reviews:', error);
+		res.status(500).json({ error: 'Failed to get reviews' });
 	}
 });
 

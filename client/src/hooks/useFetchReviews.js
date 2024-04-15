@@ -17,7 +17,7 @@ export function useFetchMovieReviews() {
 
     setIsLoading(true);
 
-    const url = `${process.env.REACT_APP_API_URL}/reviews/${movieId}`;
+    const url = `${process.env.REACT_APP_API_URL}/movies/${movieId}/reviews`;
 
     try {
       const response = await fetch(url, {
@@ -58,6 +58,12 @@ export function useFetchMovieReviews() {
       setIsLoading(false);
     }
   }, [accessToken, userProfile]);
+  
 
-  return { fetchReviews, isLoading, reviews, error };
+  return { fetchReviews, isLoading, reviews, setReviews, error };
 }
+
+
+
+
+

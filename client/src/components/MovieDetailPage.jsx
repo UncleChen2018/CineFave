@@ -6,24 +6,44 @@ import MovieDetailCard from './MovieDetailCard';
 import ReviewList from './ReviewList';
 import ReviewForm from './ReviewForm';
 
-import {useFetchMovieReviews} from '../hooks/useFetchReviews';
+import { useFetchMovieReviews } from '../hooks/useFetchReviews';
+import { useUpdateReview } from '../hooks/useUpdateReview';
+import { useDeleteReview } from '../hooks/useDeleteReview';
 
-import { Box, Divider,Text } from '@chakra-ui/react';
+import { Box, Divider, Text } from '@chakra-ui/react';
 
 function MovieDetailPage() {
 	const { id } = useParams();
 
 	const [movie, setMovie] = useState(null); // State to hold the movie details and its reviews
 	const [showReviewForm, setShowReviewForm] = useState(false);
-
+	const updateReview = useUpdateReview();
+	const deleteReview = useDeleteReview();
 	// Fetch reviews from the CineFav API
-	const { fetchReviews, isLoading, reviews, error } = useFetchMovieReviews();
+	const { fetchReviews, isLoading, reviews, setReviews, error } =
+		useFetchMovieReviews();
+	// updateReview and deleteReview hooks
+	const handleUpdateReview = (reviewId, updatedData) => {
+		updateReview(reviewId, updatedData, (updatedReview) => {
+			// Update the local state with the updated review
+			setReviews(
+				reviews.map((review) =>
+					review.id === reviewId ? updatedReview : review
+				)
+			);
+		});
+	};
+
+	const handleDeleteReview = (reviewId) => {
+		deleteReview(reviewId, () => {
+			// Update the local state to remove the deleted review
+			setReviews(reviews.filter((review) => review.id !== reviewId));
+		});
+	};
 
 	useEffect(() => {
-    fetchReviews(id);
-  }, [fetchReviews, id]);
-
-	
+		fetchReviews(id);
+	}, [fetchReviews, id]);
 
 	// Fetch movie details, also put the reviews into it
 	useEffect(() => {
@@ -55,15 +75,15 @@ function MovieDetailPage() {
 					...detailsData,
 					imageUrl: `${process.env.REACT_APP_TMDB_IMG_HOST_URL}${process.env.REACT_APP_TMDB_IMAGE_SIZE}${detailsData.poster_path}`,
 					releaseDate: detailsData.release_date,
-					reviews: reviewsData.results.map(review => ({
+					reviews: reviewsData.results.map((review) => ({
 						...review,
 						author_details: {
-								...review.author_details,
-								avatar_path: review.author_details.avatar_path
-										? `https://image.tmdb.org/t/p/original${review.author_details.avatar_path}`
-										: null
-						}
-				})),
+							...review.author_details,
+							avatar_path: review.author_details.avatar_path
+								? `https://image.tmdb.org/t/p/original${review.author_details.avatar_path}`
+								: null,
+						},
+					})),
 				});
 			} catch (error) {
 				console.error('Fetching movie data failed:', error);
@@ -99,9 +119,13 @@ function MovieDetailPage() {
 
 			{/* Conditionally render the ReviewForm based on showReviewForm state */}
 			{showReviewForm && (
-				<ReviewForm movieId={movie.id} onClose={toggleReviewForm} onSuccess={()=>fetchReviews(id)} />
+				<ReviewForm
+					movieId={movie.id}
+					onClose={toggleReviewForm}
+					onSuccess={() => fetchReviews(id)}
+				/>
 			)}
-			<ReviewList reviews={reviews} title={'Reviews from CineFav'} />
+			<ReviewList reviews={reviews} title={'Reviews from CineFav'} handleDelete={handleDeleteReview} />
 
 			<Divider my={10} />
 			<ReviewList reviews={movie.reviews} title={'Reviews from TMDB'} />
