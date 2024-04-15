@@ -173,105 +173,118 @@ app.get('/favorites', requireAuth, requireAuthUser, async (req, res) => {
 	}
 });
 
+app.post(
+	'/toggleFavorite/:movieId',
+	requireAuth,
+	requireAuthUser,
+	async (req, res) => {
+		const userId = req.userId; // Assuming requireAuthUser sets req.userId
+		const { movieId } = req.params;
+		const movieDetails = req.body.movie; // Assuming movie details are sent in the request body
+		console.log('from toggleFavorite:', userId, movieId, movieDetails);
 
-app.post('/toggleFavorite/:movieId', requireAuth, requireAuthUser, async (req, res) => {
-	const userId = req.userId; // Assuming requireAuthUser sets req.userId
-	const { movieId } = req.params;
-	const movieDetails = req.body.movie; // Assuming movie details are sent in the request body
-	console.log('from toggleFavorite:', userId, movieId, movieDetails);
-
-	try {
+		try {
 			// Check if the movie is already in FavMovie table
 			let favMovie = await prisma.favMovie.upsert({
-					where: {
-							id: parseInt(movieId),
-					},
-					update: {
-						title: movieDetails.title,
-						releaseDate: movieDetails.releaseDate ? new Date(movieDetails.releaseDate) : undefined,
-						rating: movieDetails.rating ? parseFloat(movieDetails.rating) : undefined,
-						imageUrl: movieDetails.imageUrl,
-					},
-					create: {
-						id: parseInt(movieId),
-						title: movieDetails.title,
-						releaseDate: new Date(movieDetails.releaseDate),
-						rating: parseFloat(movieDetails.rating),
-						imageUrl: movieDetails.imageUrl,
-					},
+				where: {
+					id: parseInt(movieId),
+				},
+				update: {
+					title: movieDetails.title,
+					releaseDate: movieDetails.releaseDate
+						? new Date(movieDetails.releaseDate)
+						: undefined,
+					rating: movieDetails.rating
+						? parseFloat(movieDetails.rating)
+						: undefined,
+					imageUrl: movieDetails.imageUrl,
+				},
+				create: {
+					id: parseInt(movieId),
+					title: movieDetails.title,
+					releaseDate: new Date(movieDetails.releaseDate),
+					rating: parseFloat(movieDetails.rating),
+					imageUrl: movieDetails.imageUrl,
+				},
 			});
 
-		
 			const favorite = await prisma.favorite.findUnique({
-					where: {
-							userId_movieId: {
-									userId: userId,
-									movieId: parseInt(movieId),
-							},
+				where: {
+					userId_movieId: {
+						userId: userId,
+						movieId: parseInt(movieId),
 					},
+				},
 			});
 
 			let response;
 			// If it's a favorite, remove it, else add it
 			if (favorite) {
-					await prisma.favorite.delete({
-							where: {
-									userId_movieId: {
-											userId: userId,
-											movieId: parseInt(movieId),
-									},
-							},
-					});
-					response = { message: 'Favorite removed', movieId, favorited: false };
+				await prisma.favorite.delete({
+					where: {
+						userId_movieId: {
+							userId: userId,
+							movieId: parseInt(movieId),
+						},
+					},
+				});
+				response = { message: 'Favorite removed', movieId, favorited: false };
 			} else {
-					await prisma.favorite.create({
-							data: {
-									userId: userId,
-									movieId: favMovie.id, // Use the id from FavMovie
-							},
-					});
-					response = { message: 'Favorite added', movieId, favorited: true };
+				await prisma.favorite.create({
+					data: {
+						userId: userId,
+						movieId: favMovie.id, // Use the id from FavMovie
+					},
+				});
+				response = { message: 'Favorite added', movieId, favorited: true };
 			}
 
 			res.json(response);
-	} catch (error) {
+		} catch (error) {
 			console.error('Failed to toggle favorite:', error);
 			res.status(500).json({ error: 'Internal server error' });
+		}
 	}
-});
+);
 
+app.get(
+	'/favorites/details',
+	requireAuth,
+	requireAuthUser,
+	async (req, res) => {
+		console.log('from favorites:', req.userId);
+		try {
+			// Fetch favorite records and include related FavMovie details
+			const favorites = await prisma.favorite.findMany({
+				where: {
+					userId: req.userId,
+				},
+				select: {
+					movieId: true, // Selecting movieId directly
+					createTime: true, // Optionally include other fields as needed
+					favMovie: {
+						// Include the related FavMovie details
+						select: {
+							id: true,
+							title: true,
+							releaseDate: true,
+							rating: true,
+							imageUrl: true,
+						},
+					},
+				},
+				orderBy: {
+					createTime: 'desc', // Order by createTime in ascending order
+				},
+			});
 
-app.get('/favorites/details', requireAuth, requireAuthUser, async (req, res) => {
-  console.log('from favorites:', req.userId);
-  try {
-    // Fetch favorite records and include related FavMovie details
-    const favorites = await prisma.favorite.findMany({
-      where: {
-        userId: req.userId,
-      },
-      select: {
-        movieId: true, // Selecting movieId directly
-        createTime: true, // Optionally include other fields as needed
-        favMovie: { // Include the related FavMovie details
-          select: {
-            id: true,
-            title: true,
-            releaseDate: true,
-            rating: true,
-            imageUrl: true,
-          }
-        }
-      },
-    });
-
-    res.json(favorites);
-  } catch (error) {
-    console.error('Failed to fetch favorites:', error);
-    res.status(500).json({ error: 'Failed to fetch favorites' });
-  }
-});
-
-
+			res.json(favorites);
+		} catch (error) {
+			console.error('Failed to fetch favorites:', error);
+			res.status(500).json({ error: 'Failed to fetch favorites' });
+		}
+	}
+);
 
 // might not need this endpoint
 //get the status for a list of movies if they are in the user's favorite list
@@ -296,9 +309,65 @@ app.post('/favoritesStatus', requireAuth, async (req, res) => {
 	res.json(favoriteMovieIds);
 });
 
-
-
 // Table review
+// post a review for a movie
+app.post(
+	'/reviews/:movieId',
+	requireAuth,
+	requireAuthUser,
+	async (req, res) => {
+		const userId = req.userId; // Assuming requireAuthUser sets req.userId
+		const { movieId } = req.params;
+		const reviewData = req.body;
+		console.log('from reviews:', userId, movieId, reviewData);
+		if (!reviewData||!reviewData.content || reviewData.content.trim() === '') {
+			return res.status(400).json({ error: 'Review content is required' });
+		}
+
+		try {
+			const review = await prisma.review.create({
+				data: {
+					title: reviewData.title?.trim() || 'Review by CineFav User',
+					content: reviewData.content,
+					rating: reviewData.rating?parseFloat(reviewData.rating): 0.6,
+					userId,
+					movieId: parseInt(movieId),
+				},
+			});
+
+			res.json(review);
+		} catch (error) {
+			console.error('Failed to post review:', error);
+			res.status(500).json({ error: 'Failed to post review' });
+		}
+	}
+);
+
+// get the list of reviews for a movie
+app.get('/reviews/:movieId', async (req, res) => {
+	const { movieId } = req.params;
+
+	try {
+		const reviews = await prisma.review.findMany({
+			where: {
+				movieId: parseInt(movieId),
+			},
+			include: {
+				user: {
+					select: {
+						nickname: true,
+						picture: true,
+					},
+				},
+			},
+		});
+
+		res.json(reviews);
+	} catch (error) {
+		console.error('Failed to fetch reviews:', error);
+		res.status(500).json({ error: 'Failed to fetch reviews' });
+	}
+});
 
 app.listen(8000, () => {
 	console.log('Server running on http://localhost:8000 🎉 🚀');

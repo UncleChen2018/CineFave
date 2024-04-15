@@ -12,56 +12,52 @@ model FavMovie {
   title       String?
   releaseDate DateTime? @map("release_date")
   rating      Float?    @map("rating")
-  imageUrl    String?   @map("image_url")   // Already optional
+  imageUrl    String?   @map("image_url") // Already optional
 
-  favorites   Favorite[]
+  favorites Favorite[]
 
   @@map("fav_movie")
 }
-
 
 model Favorite {
   userId     Int      @map("user_id")
   movieId    Int      @map("movie_id") // Keep original column name
   createTime DateTime @default(now()) @map("create_time")
 
-  user       User      @relation(fields: [userId], references: [id])
-  favMovie   FavMovie  @relation(fields: [movieId], references: [id]) // Relation to FavMovie
+  user     User     @relation(fields: [userId], references: [id])
+  favMovie FavMovie @relation(fields: [movieId], references: [id]) // Relation to FavMovie
 
   @@id([userId, movieId]) // Composite primary key
   @@map("favorite")
 }
 
 model Review {
-  id          Int      @id @default(autoincrement())
-  userId      Int      @map("user_id")
-  movieId     Int      @map("movie_id")
-  title       String?  @db.VarChar(255)
-  content     String?  @db.Text
-  rate        Float?
-  status      Int      @default(0) // 0: valid, 1: invalid, 2: deleted  
-  createTime  DateTime @default(now()) @map("create_time")
-  updateTime  DateTime @updatedAt @map("update_time")
-  user        User     @relation(fields: [userId], references: [id])
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  movieId    Int      @map("movie_id")
+  title      String   @db.VarChar(255)
+  content    String   @db.Text
+  rating     Float?
+  status     Int      @default(0) // 0: valid, 1: deleted by user, 2: deleted by admin  
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+  user       User     @relation(fields: [userId], references: [id])
 
   @@map("review")
 }
 
-
-
-
 model User {
-  id          Int        @id @default(autoincrement())
-  email       String     @unique
-  auth0Id     String     @unique @map("auth0_id")
-  name        String?    @map("name") // Optional, can be null
-  nickname    String?    @map("nickname") // Optional, can be null
-  picture     String?    @map("picture") // Optional, can be null
-  bio         String?    @db.Text @map("bio") // Optional, can be null
-  createTime  DateTime   @default(now()) @map("create_time")
-  updateTime  DateTime   @updatedAt @map("update_time")
-  favorites   Favorite[]
-  reviews     Review[]
+  id         Int        @id @default(autoincrement())
+  email      String     @unique
+  auth0Id    String     @unique @map("auth0_id")
+  name       String?    @map("name") // Optional, can be null
+  nickname   String?    @map("nickname") // Optional, can be null
+  picture    String?    @map("picture") // Optional, can be null
+  bio        String?    @map("bio") @db.Text // Optional, can be null
+  createTime DateTime   @default(now()) @map("create_time")
+  updateTime DateTime   @updatedAt @map("update_time")
+  favorites  Favorite[]
+  reviews    Review[]
 
   @@map("user")
 }

@@ -19,7 +19,7 @@ import NotFound from './components/NotFound';
 import NotAuthorizedPage from './components/NotAuthorizedPage';
 import Home from './components/Home';
 import Header from './components/Header';
-import AppLayout from './components/AppLayout';
+
 import MovieDetailPage from './components/MovieDetailPage';
 import ProfilePage from './components/ProfilePage';
 import AuthDebugger from './components/AuthDebugger';
