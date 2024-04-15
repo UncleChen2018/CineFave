@@ -32,6 +32,13 @@ export default function Header() {
     });
   };
 
+	const handleLogout = () => {
+		localStorage.removeItem('userProfile');
+		localStorage.removeItem('favorites');
+		localStorage.removeItem('lastPage');
+		logout({ returnTo: window.location.origin });
+	}
+
 	const bg = useColorModeValue('blue.500', 'blue.800'); // Light mode: blue.500, dark mode: blue.800
 	const color = useColorModeValue('white', 'gray.200'); // Light mode: white text, dark mode: slightly darker text
 	const isMobile = useBreakpointValue({ base: true, md: false }); // If the screen is smaller than 48em, isMobile is true
@@ -75,7 +82,7 @@ export default function Header() {
 					isAuthenticated={isAuthenticated}
 					user={user}
 					login={handleLogin}
-					logout={logout}
+					logout={handleLogout}
 				/>
 			</Box>
 		</Flex>
