@@ -241,6 +241,36 @@ app.post('/toggleFavorite/:movieId', requireAuth, requireAuthUser, async (req, r
 });
 
 
+app.get('/favorites/details', requireAuth, requireAuthUser, async (req, res) => {
+  console.log('from favorites:', req.userId);
+  try {
+    // Fetch favorite records and include related FavMovie details
+    const favorites = await prisma.favorite.findMany({
+      where: {
+        userId: req.userId,
+      },
+      select: {
+        movieId: true, // Selecting movieId directly
+        createTime: true, // Optionally include other fields as needed
+        favMovie: { // Include the related FavMovie details
+          select: {
+            id: true,
+            title: true,
+            releaseDate: true,
+            rating: true,
+            imageUrl: true,
+          }
+        }
+      },
+    });
+
+    res.json(favorites);
+  } catch (error) {
+    console.error('Failed to fetch favorites:', error);
+    res.status(500).json({ error: 'Failed to fetch favorites' });
+  }
+});
+
 
 
 // might not need this endpoint

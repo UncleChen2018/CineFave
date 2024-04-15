@@ -13,7 +13,7 @@ import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { ratingToColor } from '../utilities';
 
-import useToggleFavorite from '../hooks/useToggleFavorite';
+
 
 export default function MovieCard({ movie, w, onFavoriteClick}) {
 	const { id, title, releaseDate, imageUrl, rating, isLiked } = movie;
@@ -67,7 +67,7 @@ export default function MovieCard({ movie, w, onFavoriteClick}) {
 					aria-label='Like movie'
 					icon={
 						isLiked ? (
-							<AiFillHeart color='red' size='1.25em' />
+							<AiFillHeart color='crimson' size='1.25em' />
 						) : (
 							<AiOutlineHeart size='1.25em' />
 						)

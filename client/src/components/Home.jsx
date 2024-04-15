@@ -16,16 +16,15 @@ import { useUserInfo } from '../UserInfoContext';
 import useToggleFavorite from '../hooks/useToggleFavorite';
 
 export default function Home() {
-	const navigate = useNavigate();
 	const { isAuthenticated, loginWithRedirect } = useAuth0();
 	const { favorites } = useUserInfo();
 	const [moviesTD, setMoviesTD] = useState([]);
 	const [moviesTW, setMoviesTW] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
-
-	const { toggleFavorite } = useToggleFavorite();
-
+    const { toggleFavorite } = useToggleFavorite();
+	
+	// Fetch movies only once
 	useEffect(() => {
 		const fetchMovies = async (endpoint) => {
 			try {
@@ -44,6 +43,7 @@ export default function Home() {
 					releaseDate: movie.release_date,
 					rating: movie.vote_average,
 					imageUrl: `${process.env.REACT_APP_TMDB_IMG_HOST_URL}${process.env.REACT_APP_TMDB_IMAGE_SIZE}${movie.poster_path}`,
+                    isLiked: favorites.some(fav => fav.movieId === movie.id), // Check if the movie is in favorites
 				}));
 			} catch (error) {
 				throw error;
@@ -69,8 +69,9 @@ export default function Home() {
 				setIsLoading(false);
 			}
 		};
-		// no matter if the user is authenticated or not, we want to load the movies
+
 		loadMovies();
+
 	}, []); // Re-run the effect if authentication status or favorites change
 
 	useEffect(() => {
@@ -89,7 +90,6 @@ export default function Home() {
 		setMoviesTW(updatedMoviesTW);
 	}, [favorites]); // This useEffect will run when favorites change
 
-
 	if (isLoading) {
 		return <Box>Loading...</Box>;
 	}
@@ -97,6 +97,8 @@ export default function Home() {
 	if (error) {
 		return <Box>Error: {error}</Box>;
 	}
+
+
 
 	const handleFavoriteClick = async (movie) => {
 		await toggleFavorite(movie);
@@ -109,6 +111,10 @@ export default function Home() {
 				{JSON.stringify(favorites)}
 				{JSON.stringify(isAuthenticated)}
 			</Text>
+			<Text fontSize='xl' mb={5}>
+				{JSON.stringify(moviesTD.map((movie) => movie.isLiked))}
+			</Text>
+
 			<button onClick={() => handleFavoriteClick(firstMovieTD)}>
 				{firstMovieTD.isLiked ? 'Remove from Favorites' : 'Add to Favorites'}
 			</button>
@@ -132,10 +138,18 @@ export default function Home() {
 					</TabList>
 					<TabPanels>
 						<TabPanel>
-							<MovieCarousel movies={moviesTD} w={['120px', '150px']} onFavoriteClick={handleFavoriteClick} />
+							<MovieCarousel
+								movies={moviesTD}
+								w={['120px', '150px']}
+								onFavoriteClick={handleFavoriteClick}
+							/>
 						</TabPanel>
 						<TabPanel>
-							<MovieCarousel movies={moviesTW} w={['120px', '150px']} onFavoriteClick={handleFavoriteClick} />
+							<MovieCarousel
+								movies={moviesTW}
+								w={['120px', '150px']}
+								onFavoriteClick={handleFavoriteClick}
+							/>
 						</TabPanel>
 					</TabPanels>
 				</Tabs>

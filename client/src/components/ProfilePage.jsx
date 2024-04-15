@@ -5,6 +5,8 @@ import UserFavorites from './UserFavorites';
 
 import { useUserInfo } from '../UserInfoContext'; // Adjust the import path as needed
 
+
+
 import { Text, Box, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 
 const userReviews = [
@@ -23,6 +25,7 @@ const favoriteMovies = [
 function ProfilePage() {
 	const { userProfile, setUserProfile, favorites } = useUserInfo();
 
+
 	return (
 		<Box padding='4'>
 			<Text fontSize='lg' fontWeight='bold' whiteSpace='pre-wrap'>
@@ -37,13 +40,13 @@ function ProfilePage() {
 				</TabList>
 				<TabPanels>
 					<TabPanel>
-						<UserOverview userInfo={userProfile} />
+						<UserOverview  />
 					</TabPanel>
 					<TabPanel>
 						<UserReviews reviews={userReviews} />
 					</TabPanel>
 					<TabPanel>
-						<UserFavorites favorites={favorites} />
+						<UserFavorites />
 					</TabPanel>
 				</TabPanels>
 			</Tabs>
