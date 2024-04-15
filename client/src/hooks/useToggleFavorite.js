@@ -13,6 +13,7 @@ export default function useToggleFavorite() {
 
 	const handleLogin = () => {
 		localStorage.setItem('lastPage', window.location.pathname);
+		console.log('lastPage:', window.location.pathname);
 		loginWithRedirect({
 			redirectUri: `${window.location.origin}/verify-user`,
 		});

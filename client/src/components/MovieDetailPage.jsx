@@ -47,7 +47,8 @@ function MovieDetailPage() {
 				// Set movie details and reviews in the state
 				setMovie({
 					...detailsData,
-					poster_path: `${process.env.REACT_APP_TMDB_IMG_HOST_URL}${process.env.REACT_APP_TMDB_IMAGE_SIZE}${detailsData.poster_path}`,
+					imageUrl: `${process.env.REACT_APP_TMDB_IMG_HOST_URL}${process.env.REACT_APP_TMDB_IMAGE_SIZE}${detailsData.poster_path}`,
+					releaseDate: detailsData.release_date,
 					reviews: reviewsData.results
 				});
 	

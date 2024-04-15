@@ -22,8 +22,8 @@ export default function Home() {
 	const [moviesTW, setMoviesTW] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
-    const { toggleFavorite } = useToggleFavorite();
-	
+	const { toggleFavorite } = useToggleFavorite();
+
 	// Fetch movies only once
 	useEffect(() => {
 		const fetchMovies = async (endpoint) => {
@@ -43,7 +43,7 @@ export default function Home() {
 					releaseDate: movie.release_date,
 					rating: movie.vote_average,
 					imageUrl: `${process.env.REACT_APP_TMDB_IMG_HOST_URL}${process.env.REACT_APP_TMDB_IMAGE_SIZE}${movie.poster_path}`,
-                    isLiked: favorites.some(fav => fav.movieId === movie.id), // Check if the movie is in favorites
+					isLiked: favorites.some((fav) => fav.movieId === movie.id), // Check if the movie is in favorites
 				}));
 			} catch (error) {
 				throw error;
@@ -71,7 +71,6 @@ export default function Home() {
 		};
 
 		loadMovies();
-
 	}, []); // Re-run the effect if authentication status or favorites change
 
 	useEffect(() => {
@@ -97,8 +96,6 @@ export default function Home() {
 	if (error) {
 		return <Box>Error: {error}</Box>;
 	}
-
-
 
 	const handleFavoriteClick = async (movie) => {
 		await toggleFavorite(movie);
