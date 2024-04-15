@@ -15,7 +15,7 @@ import { ratingToColor } from '../utilities';
 
 import useToggleFavorite from '../hooks/useToggleFavorite';
 
-export default function MovieCard({ movie, w }) {
+export default function MovieCard({ movie, w, onFavoriteClick}) {
 	const { id, title, releaseDate, imageUrl, rating, isLiked } = movie;
 	const colorScheme = ratingToColor(rating);
 
@@ -24,7 +24,6 @@ export default function MovieCard({ movie, w }) {
 		navigate(`/movie/${id}`);
 	};
 
-	
 	return (
 		<Box
 			maxW='sm'
@@ -59,7 +58,9 @@ export default function MovieCard({ movie, w }) {
 						color='whitesmoke'
 					>
 						{Math.round(rating * 10)}
-						<Text  as="span" fontSize="0.5em" lineHeight="16px">%</Text>
+						<Text as='span' fontSize='0.5em' lineHeight='16px'>
+							%
+						</Text>
 					</CircularProgressLabel>
 				</CircularProgress>
 				<IconButton
@@ -71,7 +72,7 @@ export default function MovieCard({ movie, w }) {
 							<AiOutlineHeart size='1.25em' />
 						)
 					}
-
+					onClick={onFavoriteClick}
 					variant='ghost'
 					isRound={true}
 					pos='absolute'
@@ -92,10 +93,16 @@ export default function MovieCard({ movie, w }) {
 					direction='column'
 					justifyContent='center' // This will center the content vertically
 					height='3rem' // Set a fixed height large enough to contain one or two lines
-				><Tooltip label={title} placement="top" hasArrow>
-					<Text fontWeight='semibold' as='h4' lineHeight='tight' noOfLines={2}>
-						{title}
-					</Text>
+				>
+					<Tooltip label={title} placement='top' hasArrow>
+						<Text
+							fontWeight='semibold'
+							as='h4'
+							lineHeight='tight'
+							noOfLines={2}
+						>
+							{title}
+						</Text>
 					</Tooltip>
 				</Flex>
 				<Text color='gray.500' fontSize='sm'>

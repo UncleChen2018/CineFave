@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import MovieCard from './MovieCard'; // Adjust the import path as necessary
 
 
-export default function MovieCarousel({ movies, w }) {
+export default function MovieCarousel({ movies, w, onFavoriteClick }) {
 	const scrollContainer = useRef(null);
 	// Call useBreakpointValue at the top level of your component
 	//const scrollAmount = useBreakpointValue({ base: 150, md: 300, lg: 450 }) || 300;
@@ -35,7 +35,7 @@ export default function MovieCarousel({ movies, w }) {
 			>
 				{movies.map((movie, index) => (
 					<Box key={index} flexShrink={0} flexGrow={0}>
-						<MovieCard movie={movie} w={w} />
+						<MovieCard movie={movie} w={w} onFavoriteClick={() => onFavoriteClick(movie)}/>
 					</Box>
 				))}
 			</Flex>

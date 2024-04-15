@@ -88,7 +88,7 @@ export default function Home() {
 		}));
 		setMoviesTW(updatedMoviesTW);
 	}, [favorites]); // This useEffect will run when favorites change
-    
+
 
 	if (isLoading) {
 		return <Box>Loading...</Box>;
@@ -132,10 +132,10 @@ export default function Home() {
 					</TabList>
 					<TabPanels>
 						<TabPanel>
-							<MovieCarousel movies={moviesTD} w={['120px', '150px']} />
+							<MovieCarousel movies={moviesTD} w={['120px', '150px']} onFavoriteClick={handleFavoriteClick} />
 						</TabPanel>
 						<TabPanel>
-							<MovieCarousel movies={moviesTW} w={['120px', '150px']} />
+							<MovieCarousel movies={moviesTW} w={['120px', '150px']} onFavoriteClick={handleFavoriteClick} />
 						</TabPanel>
 					</TabPanels>
 				</Tabs>
