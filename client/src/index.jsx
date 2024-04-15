@@ -32,13 +32,20 @@ const root = ReactDOMClient.createRoot(container);
 const requestedScopes = ['profile', 'email'];
 
 const RequireAuth = () => {
-  const { isAuthenticated, isLoading } = useAuth0();
+	const { isAuthenticated, isLoading } = useAuth0();
 
-  if (isLoading) {
-    return <div>Loading...</div>; // Or some loading indicator
-  }
+	if (isLoading) {
+		return <div>Loading...</div>; // Or some loading indicator
+	}
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/not-authorized" replace />;
+	if (!isAuthenticated) {
+		// Store the path the user is coming from
+		localStorage.setItem('lastPage', window.location.pathname);
+		// Redirect to the not-authorized page
+		return <Navigate to='/not-authorized' replace />;
+	}
+
+	return <Outlet />;
 };
 
 root.render(
@@ -54,28 +61,29 @@ root.render(
 		>
 			<AuthTokenProvider>
 				<UserInfoProvider>
-				<ChakraProvider theme={theme}>
-					<BrowserRouter>
-						<Box maxW='1280px' w='100%' mx='auto' px={0}>
-							<Header />
-							<Routes>
-								<Route path='/' element={<Home />} />
-								<Route path='/verify-user' element={<VerifyUser />} />
-								<Route path='/movie/:id' element={<MovieDetailPage />} />
-								<Route path='/profile' element={<RequireAuth />}>
-									<Route index element={<ProfilePage />} />
-									<Route path='edit' element={<EditProfilePage />} />
-									<Route path='auth_debugger' element={<AuthDebugger />} />
-									
-								</Route>
-								<Route path="/not-authorized" element={<NotAuthorizedPage />} />
-								<Route path='*' element={<NotFound />} />
-								
-							</Routes>
-						</Box>
-					</BrowserRouter>
-				</ChakraProvider>
-			</UserInfoProvider>
+					<ChakraProvider theme={theme}>
+						<BrowserRouter>
+							<Box maxW='1280px' w='100%' mx='auto' px={0}>
+								<Header />
+								<Routes>
+									<Route path='/' element={<Home />} />
+									<Route path='/verify-user' element={<VerifyUser />} />
+									<Route path='/movie/:id' element={<MovieDetailPage />} />
+									<Route path='/profile' element={<RequireAuth />}>
+										<Route index element={<ProfilePage />} />
+										<Route path='edit' element={<EditProfilePage />} />
+										<Route path='auth_debugger' element={<AuthDebugger />} />
+									</Route>
+									<Route
+										path='/not-authorized'
+										element={<NotAuthorizedPage />}
+									/>
+									<Route path='*' element={<NotFound />} />
+								</Routes>
+							</Box>
+						</BrowserRouter>
+					</ChakraProvider>
+				</UserInfoProvider>
 			</AuthTokenProvider>
 		</Auth0Provider>
 	</React.StrictMode>

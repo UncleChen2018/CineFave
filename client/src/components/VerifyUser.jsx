@@ -8,8 +8,8 @@ export default function VerifyUser() {
 
   useEffect(() => {
     if (userProfile?.auth0Id) {
-      const lastPage = localStorage.getItem('lastPage') || '/profile'; // default to '/profile' if not found
-      navigate(lastPage);
+      const lastPage = localStorage.getItem('lastPage') || '/'; // default to '/' if not found
+      navigate(lastPage, { replace: true });
       localStorage.removeItem('lastPage'); // Clear the last page from storage after navigating
     }
   }, [userProfile, navigate]);
