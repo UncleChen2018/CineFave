@@ -10,10 +10,7 @@ export function useFetchMovieReviews() {
   const [error, setError] = useState(null);
 
   const fetchReviews = useCallback(async (movieId) => {
-    if (!accessToken) {
-      setError('Access token is missing');
-      return;
-    }
+
 
     setIsLoading(true);
 
@@ -21,10 +18,7 @@ export function useFetchMovieReviews() {
 
     try {
       const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
+        method: 'GET'
       });
 
       if (!response.ok) {
@@ -57,7 +51,7 @@ export function useFetchMovieReviews() {
     } finally {
       setIsLoading(false);
     }
-  }, [accessToken, userProfile]);
+  }, []);
   
 
   return { fetchReviews, isLoading, reviews, setReviews, error };

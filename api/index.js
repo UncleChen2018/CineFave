@@ -348,6 +348,7 @@ app.post(
 );
 
 // get the list of reviews for a movie
+// no need to authenticate to get the reviews
 app.get('/movies/:movieId/reviews', async (req, res) => {
 	const { movieId } = req.params;
 

@@ -6,6 +6,8 @@ import MovieDetailCard from './MovieDetailCard';
 import ReviewList from './ReviewList';
 import ReviewForm from './ReviewForm';
 
+import { useAuth0 } from '@auth0/auth0-react';
+
 import { useFetchMovieReviews } from '../hooks/useFetchReviews';
 import { useUpdateReview } from '../hooks/useUpdateReview';
 import { useDeleteReview } from '../hooks/useDeleteReview';
@@ -14,6 +16,7 @@ import { Box, Divider, Text } from '@chakra-ui/react';
 
 function MovieDetailPage() {
 	const { id } = useParams();
+	const { isAuthenticated, loginWithRedirect } = useAuth0();
 
 	const [movie, setMovie] = useState(null); // State to hold the movie details and its reviews
 	const [showReviewForm, setShowReviewForm] = useState(false);
@@ -22,6 +25,17 @@ function MovieDetailPage() {
 	// Fetch reviews from the CineFav API
 	const { fetchReviews, isLoading, reviews, setReviews, error } =
 		useFetchMovieReviews();
+
+
+	const handleAddReview = () => {
+		if (!isAuthenticated) {
+			localStorage.setItem('lastPage', window.location.pathname);
+			loginWithRedirect();
+			return;
+		}
+		setShowReviewForm(!showReviewForm);
+	};
+
 	// updateReview and deleteReview hooks
 	const handleUpdateReview = (reviewId, updatedData) => {
 		updateReview(reviewId, updatedData, (updatedReview) => {
@@ -108,14 +122,14 @@ function MovieDetailPage() {
 			{/* Movie Info and Image */}
 			<MovieDetailCard movie={movie} />
 			{/* Divider */}
-			<Divider my={10} />
+			<Divider my={5} />
 			{/*Button's to publish new review */}
-			<Button colorScheme='blue' onClick={toggleReviewForm}>
+			<Button colorScheme='blue' onClick={handleAddReview} m='5px'>
 				{showReviewForm ? 'Fold Review Form' : 'Publish My Review'}
 			</Button>
-			<Text my={4} fontSize='sm' color='gray.500'>
+			{/* <Text my={4} fontSize='sm' color='gray.500'>
 				{JSON.stringify(reviews)}
-			</Text>
+			</Text> */}
 
 			{/* Conditionally render the ReviewForm based on showReviewForm state */}
 			{showReviewForm && (
@@ -125,7 +139,15 @@ function MovieDetailPage() {
 					onSuccess={() => fetchReviews(id)}
 				/>
 			)}
-			<ReviewList reviews={reviews} title={'Reviews from CineFav'} handleDelete={handleDeleteReview} />
+
+			{/* Divider */}	
+			<Divider my={5} />
+			{/* Render the ReviewList component with the reviews from CineFav */}
+			<ReviewList
+				reviews={reviews}
+				title={'Reviews from CineFav'}
+				handleDelete={handleDeleteReview}
+			/>
 
 			<Divider my={10} />
 			<ReviewList reviews={movie.reviews} title={'Reviews from TMDB'} />
