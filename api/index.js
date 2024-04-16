@@ -63,7 +63,7 @@ app.post('/verify-user', requireAuth, async (req, res) => {
 			});
 
 			res.json(newUser);
-			console.log(newUser);
+			//console.log(newUser);
 		}
 	} catch (error) {
 		res.status(500).json({ error: error.message });
@@ -87,6 +87,7 @@ app.get('/userProfile', requireAuth, async (req, res) => {
 app.put('/userProfile', requireAuth, async (req, res) => {
 	const auth0Id = req.auth.payload.sub;
 	const { nickname, bio } = req.body;
+	console.log('from put userprofile:', nickname, bio);
 
 	// Initialize an empty object to hold fields to update
 	let updateData = {};
@@ -97,9 +98,8 @@ app.put('/userProfile', requireAuth, async (req, res) => {
 	}
 
 	// Add bio to the update data if it's provided and not empty
-	if (bio && bio.trim() !== '') {
-		updateData.bio = bio;
-	}
+
+	updateData.bio = bio;
 
 	// Check if there's anything to update
 	if (Object.keys(updateData).length === 0) {
@@ -133,7 +133,7 @@ async function requireAuthUser(req, res, next) {
 			select: { id: true },
 		});
 
-		console.log('from requireAuthUser get user:', user);
+		
 
 		if (!user) {
 			return res.status(404).json({ error: 'User not found' });
@@ -153,7 +153,6 @@ async function requireAuthUser(req, res, next) {
 // API for favorite movies
 // get the list of favorite movies for the authenticated user
 app.get('/favorites', requireAuth, requireAuthUser, async (req, res) => {
-	console.log('from favorites:', req.userId);
 	try {
 		// Fetch only the favorite records with their movieId fields
 		const favorites = await prisma.favorite.findMany({
@@ -181,7 +180,7 @@ app.post(
 		const userId = req.userId; // Assuming requireAuthUser sets req.userId
 		const { movieId } = req.params;
 		const movieDetails = req.body.movie; // Assuming movie details are sent in the request body
-		console.log('from toggleFavorite:', userId, movieId, movieDetails);
+		
 
 		try {
 			// Check if the movie is already in FavMovie table
@@ -252,7 +251,7 @@ app.get(
 	requireAuth,
 	requireAuthUser,
 	async (req, res) => {
-		console.log('from favorites:', req.userId);
+
 		try {
 			// Fetch favorite records and include related FavMovie details
 			const favorites = await prisma.favorite.findMany({
@@ -319,7 +318,7 @@ app.post(
 		const userId = req.userId; // Assuming requireAuthUser sets req.userId
 		const { movieId } = req.params;
 		const reviewData = req.body;
-		console.log('from reviews:', userId, movieId, reviewData);
+	
 		if (
 			!reviewData ||
 			!reviewData.content ||
@@ -379,7 +378,6 @@ app.get('/movies/:movieId/reviews', async (req, res) => {
 	}
 });
 
-
 // Get all reviews published by the authenticated user
 app.get('/user/reviews', requireAuth, requireAuthUser, async (req, res) => {
 	const userId = req.userId; // Set by requireAuthUser middleware
@@ -410,7 +408,6 @@ app.get('/user/reviews', requireAuth, requireAuthUser, async (req, res) => {
 	}
 });
 
-
 // API of reviews
 // Update a review by review ID
 app.put(
@@ -421,7 +418,7 @@ app.put(
 		const { reviewId } = req.params;
 		const userId = req.userId; // Set by requireAuthUser middleware
 		const { title, content, rating } = req.body;
-		console.log('from put reviews:', req.body);
+		
 
 		try {
 			const review = await prisma.review.findUnique({
@@ -490,7 +487,6 @@ app.delete(
 		}
 	}
 );
-
 
 app.listen(8000, () => {
 	console.log('Server running on http://localhost:8000 🎉 🚀');

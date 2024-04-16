@@ -43,7 +43,7 @@ const EditProfile = () => {
           onChange={(e) => setNickname(e.target.value)}
         />
       </Box>
-      <Box mt='2'>
+      <Box mt='2' maxW='100%'>
         <Text fontSize="md" color="gray.500">Bio:</Text>
         <MarkdownEditor
           initialText={bio}
