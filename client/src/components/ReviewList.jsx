@@ -40,7 +40,7 @@ function ReviewList({ title, reviews, handleDelete, handleEdit }) {
 
 	return (
 		<VStack align='start' spacing={8}>
-			<Text fontSize='sm'> {JSON.stringify(editingReview)}</Text>
+			{/* <Text fontSize='sm'> {JSON.stringify(editingReview)}</Text> */}
 			<Heading as='h3' size='lg' width='full'>
 				{title}
 			</Heading>

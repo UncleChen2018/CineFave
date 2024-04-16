@@ -14,6 +14,7 @@ import {
 import MovieCarousel from './MovieCarousel';
 import { useUserInfo } from '../UserInfoContext';
 import useToggleFavorite from '../hooks/useToggleFavorite';
+import SearchBar from './SearchBar';
 
 export function transformMovieData(movie, favorites = []) {
 	return {
@@ -109,17 +110,28 @@ export default function Home() {
 	const firstMovieTD = moviesTD[0] || {}; // Assuming you want to toggle favorite for the first movie in the list
 	return (
 		<Box p={{ base: 5, md: 20, lg: 30 }} mt={-5}>
-			<Text fontSize='xl' mb={5}>
+			<Box mb={4}>
+				<Heading
+					as='h2'
+					size='lg'
+					py='5'
+					sx={{ fontSize: ['md', 'lg', 'xl', '2xl'] }}
+				>
+					Search
+				</Heading>
+			<SearchBar />
+			</Box>
+			{/* <Text fontSize='xl' mb={5}>
 				{JSON.stringify(favorites)}
 				{JSON.stringify(isAuthenticated)}
 			</Text>
 			<Text fontSize='xl' mb={5}>
 				{JSON.stringify(moviesTD.map((movie) => movie.isLiked))}
-			</Text>
+			</Text> */}
 
-			<button onClick={() => handleFavoriteClick(firstMovieTD)}>
+			{/* <button onClick={() => handleFavoriteClick(firstMovieTD)}>
 				{firstMovieTD.isLiked ? 'Remove from Favorites' : 'Add to Favorites'}
-			</button>
+			</button> */}
 			<Box mb={4}>
 				<Heading
 					as='h2'

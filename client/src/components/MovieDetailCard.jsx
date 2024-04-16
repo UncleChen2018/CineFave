@@ -23,7 +23,7 @@ function MovieDetailCard({ movie }) {
     <SimpleGrid templateColumns={{ base: '1fr', md: 'auto 1fr' }} spacing={10}>
       <Box
         display="flex"
-        alignItems="center"
+        alignItems="start"
         justifyContent="center"
         height="100%"
         width="100%"
@@ -62,8 +62,8 @@ function MovieDetailCard({ movie }) {
 				/>
       </Box>
       <VStack align="start" spacing={4}>
-        <Text fontSize="md" color="gray.600">{JSON.stringify(favorites)}</Text>
-        <Text fontSize="md" color="gray.600">{String(isLiked)}</Text>
+        {/* <Text fontSize="md" color="gray.600">{JSON.stringify(favorites)}</Text>
+        <Text fontSize="md" color="gray.600">{String(isLiked)}</Text> */}
         <Heading as="h2" size="xl">
           {title} ({new Date(releaseDate).getFullYear()})
         </Heading>

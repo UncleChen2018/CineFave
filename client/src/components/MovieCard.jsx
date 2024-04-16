@@ -106,7 +106,7 @@ export default function MovieCard({ movie, w, onFavoriteClick}) {
 					</Tooltip>
 				</Flex>
 				<Text color='gray.500' fontSize='sm'>
-					{releaseDate}
+					{releaseDate || 'Unknown release date'}
 				</Text>
 			</Box>
 		</Box>

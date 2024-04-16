@@ -12,11 +12,9 @@ export default function useToggleFavorite() {
 	const { loginWithRedirect } = useAuth0();
 
 	const handleLogin = () => {
-		localStorage.setItem('lastPage', window.location.pathname);
-		console.log('lastPage:', window.location.pathname);
-		loginWithRedirect({
-			redirectUri: `${window.location.origin}/verify-user`,
-		});
+		localStorage.setItem('lastPage', window.location.href);
+		console.log('lastPage:', window.location.href);
+		loginWithRedirect();
 	};
 
 	const toggleFavorite = async (movie) => {

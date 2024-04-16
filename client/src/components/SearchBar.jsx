@@ -1,11 +1,17 @@
+// SearchBar component
 import React, { useState } from 'react';
 import { Input, Button, Flex } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
-const SearchBar = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+const SearchBar = ({value}) => {
+  const [searchTerm, setSearchTerm] = useState(value);
+  const navigate = useNavigate();
 
   const handleSearch = () => {
-    onSearch(searchTerm);
+    if (searchTerm.trim()) {
+      // Navigate to the search page with the query parameter
+      navigate(`/search?query=${encodeURIComponent(searchTerm.trim())}`);
+    }
   };
 
   return (

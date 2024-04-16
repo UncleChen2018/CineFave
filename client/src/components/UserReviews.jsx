@@ -25,8 +25,13 @@ const UserReviews = () => {
 
 
 	return (
+    <>
+    {/* <Text fontSize='lg' fontWeight='bold'>
+      {JSON.stringify(reviews, null, 2)}
+    </Text> */}
 		<ReviewList title='Your Reviews' reviews={reviews} handleDelete={handleDeleteReview} 
     handleEdit={()=>{fetchReviews()}}/>
+    </>
 	);
 };
 
