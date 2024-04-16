@@ -92,9 +92,9 @@ function SearchPage() {
 			{/* <Text fontSize='xl' fontWeight='bold' mb={4}>
 				{JSON.stringify(searchResults, null, 2)}
 			</Text> */}
-      <Text fontSize='xl' fontWeight='bold' mb={4}>
+      {/* <Text fontSize='xl' fontWeight='bold' mb={4}>
         {searchParams.toString()}
-      </Text>
+      </Text> */}
 			<SearchBar value={searchTerm} />
     
 			{isLoading && <Text>Loading...</Text>}
