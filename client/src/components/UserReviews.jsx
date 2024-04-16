@@ -1,15 +1,33 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Box, Text, VStack } from '@chakra-ui/react';
+import { useUserInfo } from '../UserInfoContext';
+import { useFetchUserReviews } from '../hooks/useFetchReviews';
+import ReviewList from './ReviewList';
 
-const UserReviews = ({ reviews }) => (
-  <VStack align="stretch">
-    {reviews.map((review, index) => (
-      <Box key={index} p="4" borderWidth="1px" borderRadius="lg">
-        <Text fontSize="lg" fontWeight="bold">{review.movieTitle}</Text>
-        <Text fontSize="md">{review.reviewText}</Text>
-      </Box>
-    ))}
-  </VStack>
-);
+import { useDeleteReview } from '../hooks/useDeleteReview'
+
+
+const UserReviews = () => {
+  const { userInfo } = useUserInfo();
+  const { fetchReviews, reviews, setReviews } = useFetchUserReviews();
+
+  useEffect(() => {
+    fetchReviews();
+  }, [userInfo]);
+
+  const deleteReview = useDeleteReview();
+  const handleDeleteReview = (reviewId) => {
+		deleteReview(reviewId, () => {
+			// Update the local state to remove the deleted review
+			setReviews(reviews.filter((review) => review.id !== reviewId));
+		});
+	};
+
+
+	return (
+		<ReviewList title='Your Reviews' reviews={reviews} handleDelete={handleDeleteReview} 
+    handleEdit={()=>{fetchReviews()}}/>
+	);
+};
 
 export default UserReviews;

@@ -26,6 +26,8 @@ import AuthDebugger from './components/AuthDebugger';
 import VerifyUser from './components/VerifyUser';
 import EditProfilePage from './components/EditProfilePage';
 
+import SearchPage from './components/SearchPage';
+
 const container = document.getElementById('root');
 const root = ReactDOMClient.createRoot(container);
 
@@ -69,6 +71,7 @@ root.render(
 									<Route path='/' element={<Home />} />
 									<Route path='/verify-user' element={<VerifyUser />} />
 									<Route path='/movie/:id' element={<MovieDetailPage />} />
+									<Route path='/search' element={<SearchPage />} />
 									<Route path='/profile' element={<RequireAuth />}>
 										<Route index element={<ProfilePage />} />
 										<Route path='edit' element={<EditProfilePage />} />

@@ -5,6 +5,7 @@ import { useUserInfo } from '../UserInfoContext';
 import {useFetchFavoritesDetails} from '../hooks/useFavoriteMovies';
 import useToggleFavorite from '../hooks/useToggleFavorite';
 
+
 const UserFavorites = () => {  
 
   const {favoritesDetails, fetchFavoritesDetails} = useFetchFavoritesDetails();

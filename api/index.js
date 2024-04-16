@@ -379,6 +379,38 @@ app.get('/movies/:movieId/reviews', async (req, res) => {
 	}
 });
 
+
+// Get all reviews published by the authenticated user
+app.get('/user/reviews', requireAuth, requireAuthUser, async (req, res) => {
+	const userId = req.userId; // Set by requireAuthUser middleware
+
+	try {
+		const reviews = await prisma.review.findMany({
+			where: {
+				userId: userId,
+				status: 0, // Only fetch reviews that are not deleted
+			},
+			include: {
+				user: {
+					select: {
+						name: true,
+						nickname: true,
+						picture: true,
+					},
+				},
+			},
+			orderBy: {
+				createTime: 'desc',
+			},
+		});
+		res.json(reviews);
+	} catch (error) {
+		console.error('Failed to get reviews:', error);
+		res.status(500).json({ error: 'Failed to get reviews' });
+	}
+});
+
+
 // API of reviews
 // Update a review by review ID
 app.put(
@@ -459,23 +491,6 @@ app.delete(
 	}
 );
 
-// Get all reviews published by the authenticated user
-app.get('/user/reviews', requireAuth, requireAuthUser, async (req, res) => {
-	const userId = req.userId; // Set by requireAuthUser middleware
-
-	try {
-		const reviews = await prisma.review.findMany({
-			where: {
-				userId: userId,
-				status: 0, // Only fetch reviews that are not deleted
-			},
-		});
-		res.json(reviews);
-	} catch (error) {
-		console.error('Failed to get reviews:', error);
-		res.status(500).json({ error: 'Failed to get reviews' });
-	}
-});
 
 app.listen(8000, () => {
 	console.log('Server running on http://localhost:8000 🎉 🚀');
