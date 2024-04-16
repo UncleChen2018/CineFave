@@ -48,8 +48,7 @@ function ReviewList({ title, reviews, handleDelete, handleEdit }) {
 				editingReview && editingReview.id === review.id ? (
 					<Box
 						key={`edit-form-${review.id}`}
-            width={'full'}
-						
+						width={'full'}
 						p={4} // Padding around the form
 						my={4} // Margin around the form
 						boxShadow='lg' // Large shadow for emphasis
@@ -78,11 +77,11 @@ function ReviewList({ title, reviews, handleDelete, handleEdit }) {
 								) : (
 									<Box borderRadius='full' boxSize='50px' bg='gray.200' />
 								)}
-								<VStack align='start'>
+								<VStack align='start'  overflow="hidden">
 									<Text fontWeight='bold'>
 										{review.title || `Review from ${review.author}`}
 									</Text>
-									<HStack>
+									<HStack spacing={4} align='center' width='full'>
 										{review.author_details.rating && (
 											<Tag colorScheme='blackAlpha' borderRadius='full'>
 												<TagLeftIcon boxSize='12px' as={FaStar} />
@@ -91,13 +90,13 @@ function ReviewList({ title, reviews, handleDelete, handleEdit }) {
 												</TagLabel>
 											</Tag>
 										)}
-										<Text fontSize='sm'>
+										<Text fontSize='sm' isTruncated flex={1} minW={0}>
 											By {review.author_details.username || 'Anonymous'}
 										</Text>
 									</HStack>
 								</VStack>
 							</HStack>
-							<Text fontSize='sm'>
+							<Text fontSize='sm' color={'gray.500'}>
 								Written on {formatDate(review.created_at)}
 								{review.updated_at !== review.created_at &&
 									` (Updated on ${formatDate(review.updated_at)})`}

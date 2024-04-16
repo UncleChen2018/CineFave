@@ -122,9 +122,9 @@ function MovieDetailPage() {
 			<Button colorScheme='blue' onClick={handleAddReview} m='5px'>
 				{showReviewForm ? 'Fold Review Form' : 'Publish My Review'}
 			</Button>
-			<Text my={4} fontSize='sm' color='gray.500'>
+			{/* <Text my={4} fontSize='sm' color='gray.500'>
 				{JSON.stringify(reviews)}
-			</Text>
+			</Text> */}
 
 			{/* Conditionally render the ReviewForm based on showReviewForm state */}
 			{showReviewForm && (

@@ -34,7 +34,11 @@ const LoginMenu = ({ isAuthenticated, user, login, logout }) => {
 							<MenuItem onClick={() => navigate('/profile')}>
 								View Profile
 							</MenuItem>
-							<MenuItem>Edit Profile</MenuItem>
+							<MenuItem onClick={() => navigate('/profile/edit')}>Edit Profile</MenuItem>
+							<MenuItem onClick={() => navigate('/profile/favorites')}>View Favorites</MenuItem>
+							<MenuItem onClick={() => navigate('/profile/reviews')}>View Reviews</MenuItem>
+							<MenuDivider />
+						
 							<MenuItem onClick={() => navigate('/profile/auth_debugger')}>AuthDebugger</MenuItem>
 						</MenuGroup>
 						<MenuDivider />
