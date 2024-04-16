@@ -20,7 +20,7 @@ const SearchBar = ({value=''}) => {
         placeholder="Search for a movie..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
       />
       <Button onClick={handleSearch} ml={2}>
         Search
