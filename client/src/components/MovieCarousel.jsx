@@ -48,6 +48,7 @@ export default function MovieCarousel({ movies, w, onFavoriteClick }) {
 				zIndex='banner'
 				onClick={() => scroll('left')}
 				size={['sm', 'sm', 'md', 'md']}
+				aria-label="Scroll left"
 			>
 				<ChevronLeftIcon />
 			</Button>
@@ -59,6 +60,7 @@ export default function MovieCarousel({ movies, w, onFavoriteClick }) {
 				zIndex='banner'
 				onClick={() => scroll('right')}
 				size={['sm', 'sm', 'md', 'md']}
+				aria-label="Scroll right"
 			>
 				<ChevronRightIcon />
 			</Button>

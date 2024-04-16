@@ -51,6 +51,7 @@ export default function MovieCard({ movie, w, onFavoriteClick}) {
 					zIndex='1'
 					bg='black'
 					borderRadius='50%'
+					aria-label="Rating percentage"
 				>
 					<CircularProgressLabel
 						fontSize='16px'
