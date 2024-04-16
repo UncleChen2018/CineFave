@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React,{useEffect,useState} from 'react';
 import { Box, Text, VStack } from '@chakra-ui/react';
 import { useUserInfo } from '../UserInfoContext';
 import { useFetchUserReviews } from '../hooks/useFetchReviews';
@@ -10,10 +10,16 @@ import { useDeleteReview } from '../hooks/useDeleteReview'
 const UserReviews = () => {
   const { userInfo } = useUserInfo();
   const { fetchReviews, reviews, setReviews } = useFetchUserReviews();
-
+  const [hasFetched, setHasFetched]=useState(false);
   useEffect(() => {
-    fetchReviews();
-  }, [userInfo]);
+    if (!hasFetched) {
+      fetchReviews();
+      setHasFetched(true);
+    } 
+    return () => {
+      setHasFetched(false);
+    }; 
+  }, [fetchReviews]);
 
   const deleteReview = useDeleteReview();
   const handleDeleteReview = (reviewId) => {

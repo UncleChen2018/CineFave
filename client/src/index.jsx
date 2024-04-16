@@ -73,7 +73,16 @@ root.render(
 									<Route path='/movie/:id' element={<MovieDetailPage />} />
 									<Route path='/search' element={<SearchPage />} />
 									<Route path='/profile' element={<RequireAuth />}>
-										<Route index element={<ProfilePage />} />
+										<Route index element={<ProfilePage defaultIndex={0}/>} />
+				
+										<Route
+											path='reviews'
+											element={<ProfilePage defaultIndex={1} />}
+										/>
+										<Route
+											path='favorites'
+											element={<ProfilePage defaultIndex={2} />}
+										/>
 										<Route path='edit' element={<EditProfilePage />} />
 										<Route path='auth_debugger' element={<AuthDebugger />} />
 									</Route>
