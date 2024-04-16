@@ -7,19 +7,19 @@ import ReviewList from './ReviewList';
 import { useDeleteReview } from '../hooks/useDeleteReview'
 
 
-const UserReviews = () => {
+const UserReviews = ({isActive}) => {
   const { userInfo } = useUserInfo();
   const { fetchReviews, reviews, setReviews } = useFetchUserReviews();
   const [hasFetched, setHasFetched]=useState(false);
   useEffect(() => {
-    if (!hasFetched) {
+    if (!hasFetched && isActive) {
       fetchReviews();
       setHasFetched(true);
     } 
     return () => {
       setHasFetched(false);
     }; 
-  }, [fetchReviews]);
+  }, [fetchReviews, isActive]);
 
   const deleteReview = useDeleteReview();
   const handleDeleteReview = (reviewId) => {

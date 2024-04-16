@@ -78,10 +78,10 @@ function ProfilePage({ defaultIndex }) {
 						<UserOverview />
 					</TabPanel>
 					<TabPanel>
-						<UserFavorites />
+						<UserFavorites/>
 					</TabPanel>
 					<TabPanel>
-						<UserReviews toFetch={[hasFetched, setHasFetched]} />
+						<UserReviews  isActive={tabIndex === 2} toFetch={[hasFetched, setHasFetched]} />
 					</TabPanel>
 				</TabPanels>
 			</Tabs>

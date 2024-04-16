@@ -6,6 +6,9 @@ import { useAuth0 } from '@auth0/auth0-react';
 export default function NotAuthorizedPage() {
 	const { loginWithRedirect } = useAuth0();
 
+
+
+
 	return (
 		<Box textAlign='center' py={10} px={6}>
 			<Heading
@@ -30,10 +33,7 @@ export default function NotAuthorizedPage() {
 				color='white'
 				variant='solid'
 				onClick={() =>{
-					loginWithRedirect({
-						// Optionally set the redirectUri dynamically
-						redirectUri: `${window.location.origin}/verify-user`,
-					})
+					loginWithRedirect()
 				}
       }
 			>

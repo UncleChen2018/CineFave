@@ -101,7 +101,7 @@ const ReviewForm = ({
 		let result;
 		if (isEditing) {
 			result =await updateReview(initialData.id, reviewData);
-			console.log(result)
+			
 		} else {
 			result = await addReview(movieId, {
 				title,

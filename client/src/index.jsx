@@ -42,7 +42,9 @@ const RequireAuth = () => {
 
 	if (!isAuthenticated) {
 		// Store the path the user is coming from
-		localStorage.setItem('lastPage', window.location.pathname);
+
+		localStorage.setItem('lastPage', window.location.href);
+
 		// Redirect to the not-authorized page
 		return <Navigate to='/not-authorized' replace />;
 	}
