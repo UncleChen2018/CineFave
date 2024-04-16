@@ -35,7 +35,7 @@ const EditProfile = () => {
   };
 
   return (
-    <Flex direction="column" align="center">
+    <Flex direction="column" align="start" width={'full'} p='4'>
       <Box>
         <Text fontSize="md" color="gray.500">Nickname:</Text>
         <Input
@@ -43,7 +43,7 @@ const EditProfile = () => {
           onChange={(e) => setNickname(e.target.value)}
         />
       </Box>
-      <Box maxW='80%'>
+      <Box mt='2'>
         <Text fontSize="md" color="gray.500">Bio:</Text>
         <MarkdownEditor
           initialText={bio}

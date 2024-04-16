@@ -13,7 +13,7 @@ const MarkdownEditor = ({ initialText, onChange }) => {
 			value={initialText}
 			onChange={handleChange}
 			
-			style={{ width: '100%', height: 'auto' }}
+			
 		/>
 	);
 };

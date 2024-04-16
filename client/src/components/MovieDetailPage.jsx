@@ -7,8 +7,8 @@ import ReviewList from './ReviewList';
 import ReviewForm from './ReviewForm';
 
 import { useAuth0 } from '@auth0/auth0-react';
-
-import { useFetchMovieReviews } from '../hooks/useFetchReviews';
+import { useUserInfo } from '../UserInfoContext';
+import { useFetchMovieReviews,transformReviewData } from '../hooks/useFetchReviews';
 import { useUpdateReview } from '../hooks/useUpdateReview';
 import { useDeleteReview } from '../hooks/useDeleteReview';
 
@@ -17,16 +17,20 @@ import { Box, Divider, Text } from '@chakra-ui/react';
 function MovieDetailPage() {
 	const { id } = useParams();
 	const { isAuthenticated, loginWithRedirect } = useAuth0();
+	const { userProfile } = useUserInfo();
 
 	const [movie, setMovie] = useState(null); // State to hold the movie details and its reviews
 	const [showReviewForm, setShowReviewForm] = useState(false);
-	const updateReview = useUpdateReview();
-	const deleteReview = useDeleteReview();
+
 	// Fetch reviews from the CineFav API
 	const { fetchReviews, isLoading, reviews, setReviews, error } =
 		useFetchMovieReviews();
 
+	useEffect(() => {
+		fetchReviews(id);
+	}, [fetchReviews, id]);
 
+	// for adding review
 	const handleAddReview = () => {
 		if (!isAuthenticated) {
 			localStorage.setItem('lastPage', window.location.pathname);
@@ -36,28 +40,19 @@ function MovieDetailPage() {
 		setShowReviewForm(!showReviewForm);
 	};
 
-	// updateReview and deleteReview hooks
-	const handleUpdateReview = (reviewId, updatedData) => {
-		updateReview(reviewId, updatedData, (updatedReview) => {
-			// Update the local state with the updated review
-			setReviews(
-				reviews.map((review) =>
-					review.id === reviewId ? updatedReview : review
-				)
-			);
-		});
-	};
+	// for editing review
 
+	const handleSuccessUpdateReview = () => {
+		fetchReviews(id);
+	};
+	// for deleting review
+	const deleteReview = useDeleteReview();
 	const handleDeleteReview = (reviewId) => {
 		deleteReview(reviewId, () => {
 			// Update the local state to remove the deleted review
 			setReviews(reviews.filter((review) => review.id !== reviewId));
 		});
 	};
-
-	useEffect(() => {
-		fetchReviews(id);
-	}, [fetchReviews, id]);
 
 	// Fetch movie details, also put the reviews into it
 	useEffect(() => {
@@ -127,9 +122,9 @@ function MovieDetailPage() {
 			<Button colorScheme='blue' onClick={handleAddReview} m='5px'>
 				{showReviewForm ? 'Fold Review Form' : 'Publish My Review'}
 			</Button>
-			{/* <Text my={4} fontSize='sm' color='gray.500'>
+			<Text my={4} fontSize='sm' color='gray.500'>
 				{JSON.stringify(reviews)}
-			</Text> */}
+			</Text>
 
 			{/* Conditionally render the ReviewForm based on showReviewForm state */}
 			{showReviewForm && (
@@ -140,13 +135,15 @@ function MovieDetailPage() {
 				/>
 			)}
 
-			{/* Divider */}	
+			{/* Divider */}
 			<Divider my={5} />
 			{/* Render the ReviewList component with the reviews from CineFav */}
 			<ReviewList
 				reviews={reviews}
 				title={'Reviews from CineFav'}
 				handleDelete={handleDeleteReview}
+				handleEdit={handleSuccessUpdateReview}
+				onSuccess={() => fetchReviews(id)}
 			/>
 
 			<Divider my={10} />

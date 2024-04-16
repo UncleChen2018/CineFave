@@ -4,7 +4,7 @@ import { useAuthToken } from '../AuthTokenContext';
 export const useUpdateReview = () => {
   const { accessToken } = useAuthToken();
 
-  const updateReview = useCallback(async (reviewId, updatedReviewData, onSuccess) => {
+  const updateReview = useCallback(async (reviewId, updatedReviewData) => {
     if (!accessToken) {
       throw new Error('Access token is missing');
     }
@@ -27,9 +27,10 @@ export const useUpdateReview = () => {
       }
 
       const updatedReview = await response.json();
+      return updatedReview; // Return the updated review data
 
-      // Invoke the success callback with the updated review
-      onSuccess(updatedReview);
+  
+    
 
     } catch (error) {
       console.error(error);
@@ -37,5 +38,5 @@ export const useUpdateReview = () => {
     }
   }, [accessToken]);
 
-  return updateReview;
+  return {updateReview};
 };

@@ -333,7 +333,7 @@ app.post(
 				data: {
 					title: reviewData.title?.trim(),
 					content: reviewData.content,
-					rating: reviewData.rating ? parseFloat(reviewData.rating) : 0.6,
+					rating: reviewData.rating,
 					userId,
 					movieId: parseInt(movieId),
 				},
@@ -389,6 +389,7 @@ app.put(
 		const { reviewId } = req.params;
 		const userId = req.userId; // Set by requireAuthUser middleware
 		const { title, content, rating } = req.body;
+		console.log('from put reviews:', req.body);
 
 		try {
 			const review = await prisma.review.findUnique({

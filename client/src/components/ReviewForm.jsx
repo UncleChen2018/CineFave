@@ -11,6 +11,8 @@ import {
 import { StarIcon } from '@chakra-ui/icons';
 import MarkdownEditor from './MarkdownEditor';
 import useAddReview from '../hooks/useAddReview'; // Replace with the actual hook for adding a review
+import { useUpdateReview } from '../hooks/useUpdateReview';
+
 
 // A simple star rating component
 
@@ -52,16 +54,29 @@ const Rating = ({
 	);
 };
 
-const ReviewForm = ({ movieId, onClose, onSuccess }) => {
-	const [title, setTitle] = useState('');
-	const [content, setContent] = useState('');
-
-	const [rating, setRating] = useState(3); // 5 star rating system
+const ReviewForm = ({
+	movieId,
+	initialData,
+	isEditing,
+	onClose,
+	onSuccess,
+}) => {
+	const [title, setTitle] = useState(
+		isEditing && initialData ? initialData.title : ''
+	);
+	const [content, setContent] = useState(
+		isEditing && initialData ? initialData.content : ''
+	);
+	const [rating, setRating] = useState(
+		isEditing && initialData ? initialData.rating * maxRating : 3
+	);
 	const [ratingDescription, setRatingDescription] = useState(
 		ratingDescriptions[rating]
 	);
 
 	const { addReview, isSubmitting, error } = useAddReview();
+	const { updateReview } = useUpdateReview();
+	
 	const toast = useToast();
 
 	const handleSubmit = async () => {
@@ -77,12 +92,23 @@ const ReviewForm = ({ movieId, onClose, onSuccess }) => {
 		}
 
 		const ratingScore = rating / maxRating;
-    //success message
-		const result = await addReview(movieId, {
+		//success message
+		const reviewData = {
 			title,
 			content,
 			rating: ratingScore,
-		});
+		};
+		let result;
+		if (isEditing) {
+			result =await updateReview(initialData.id, reviewData);
+			console.log(result)
+		} else {
+			result = await addReview(movieId, {
+				title,
+				content,
+				rating: ratingScore,
+			});
+		}
 		if (result) {
 			setTitle('');
 			setContent('');
@@ -95,7 +121,7 @@ const ReviewForm = ({ movieId, onClose, onSuccess }) => {
 				duration: 5000,
 				isClosable: true,
 			});
-      onClose();
+			onClose();
 			onSuccess();
 		}
 	};
