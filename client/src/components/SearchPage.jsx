@@ -45,7 +45,7 @@ function SearchPage() {
     };
 
 	const handleSearch = async (query) => {
-    console.log('searching for:', query);
+
 		if (!query) return;
 
 		setIsLoading(true);

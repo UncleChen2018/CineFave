@@ -27,6 +27,11 @@ const { PrismaClient } = pkg;
 const prisma = new PrismaClient();
 
 // this is a public endpoint because it doesn't have the requireAuth middleware
+app.get('/', (req, res) => {
+	res.send('Hello World!');
+});
+
+
 app.get('/ping', (req, res) => {
 	res.send('pong');
 });
