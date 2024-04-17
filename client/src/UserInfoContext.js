@@ -72,9 +72,14 @@ export const UserInfoProvider = ({ children }) => {
 
 	useEffect(() => {
 		if (isAuthenticated && accessToken) {
-			fetchUserProfile();
-			fetchFavorites();
-		} 
+			if (isAuthenticated && accessToken) {
+				fetchUserProfile().then((userProfile) => {
+					if (userProfile) {
+						fetchFavorites();
+					}
+				});
+			}
+		}
 	}, [isAuthenticated, accessToken]);
 
 	useEffect(() => {

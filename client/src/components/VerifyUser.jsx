@@ -22,5 +22,7 @@ export default function VerifyUser() {
         }
     }, [userProfile, navigate]);
 
+    
+
     return <div className='loading'>Loading...</div>;
 }

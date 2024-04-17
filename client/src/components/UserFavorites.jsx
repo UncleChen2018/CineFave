@@ -19,6 +19,13 @@ const UserFavorites = () => {
 	const handleFavoriteClick = async (movie) => {
 		await toggleFavorite(movie);
 	};
+	if (!favoritesDetails || favoritesDetails.length === 0) {
+		return (
+			<Box>
+				<Text>No favorites available.</Text>
+			</Box>
+		);
+	}
 
 	return (
 		<Wrap spacing='20px'>

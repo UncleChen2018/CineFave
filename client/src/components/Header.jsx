@@ -23,7 +23,7 @@ export default function Header() {
 
   const handleLogin = () => {
     // Save the current page in local storage
-    localStorage.setItem('lastPage', window.location.pathname);
+    localStorage.setItem('lastPage', window.location.href);
 
     // Redirect to login
     loginWithRedirect({
