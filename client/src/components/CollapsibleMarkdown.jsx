@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect,useLayoutEffect } from 'react';
 import { Box, Text } from '@chakra-ui/react';
 import MarkdownReader from './MarkdownReader';
 
@@ -7,7 +7,7 @@ const CollapsibleMarkdown = ({ content, maxHeight = '200px' }) => {
   const [isContentOverflowing, setIsContentOverflowing] = useState(false);
   const contentRef = useRef(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const checkContentOverflow = () => {
       if (contentRef.current) {
         setIsContentOverflowing(contentRef.current.scrollHeight > contentRef.current.clientHeight);

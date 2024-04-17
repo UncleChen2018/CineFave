@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useAuthToken } from './AuthTokenContext';
-import { useFetchFavorites } from './hooks/useFavoriteMovies'; // Ensure correct path
+
 
 const UserInfoContext = createContext(null);
 

@@ -11,7 +11,7 @@ const MarkdownReader = ({ content }) => {
           <Text {...props} wordBreak='break-word' />
         ),
         // Make images responsive
-        img: ({ node, ...props }) => <Image {...props} maxW='100%' />,
+        img: ({ node, ...props }) => <Image {...props} maxW='100%' onLoad={() => window.dispatchEvent(new Event('resize'))}  />,
         // Handle code blocks or preformatted text
         code: ({ node, ...props }) => (
           <Box as='code' {...props} overflowX='auto' />
