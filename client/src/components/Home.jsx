@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useNavigate } from 'react-router-dom';
+
 import {
-	Text,
 	Box,
 	Heading,
 	Tab,
@@ -23,14 +22,14 @@ export function transformMovieData(movie, favorites = []) {
 		title: movie.title,
 		releaseDate: movie.release_date,
 		rating: movie.vote_average,
-		imageUrl: movie.poster_path?`${process.env.REACT_APP_TMDB_IMG_HOST_URL}${process.env.REACT_APP_TMDB_IMAGE_SIZE}${movie.poster_path}`:null,
+		imageUrl: movie.poster_path
+			? `${process.env.REACT_APP_TMDB_IMG_HOST_URL}${process.env.REACT_APP_TMDB_IMAGE_SIZE}${movie.poster_path}`
+			: null,
 		isLiked: favorites.some((fav) => fav.movieId === movie.id), // Check if the movie is in favorites
 	};
 }
 
-
 export default function Home() {
-	const { isAuthenticated, loginWithRedirect } = useAuth0();
 	const { favorites } = useUserInfo();
 	const [moviesTD, setMoviesTD] = useState([]);
 	const [moviesTW, setMoviesTW] = useState([]);
@@ -50,7 +49,9 @@ export default function Home() {
 					throw new Error('Something went wrong with the movie fetch.');
 				}
 				const data = await response.json();
-				return data.results.map((movie) => (transformMovieData(movie,favorites)));
+				return data.results.map((movie) =>
+					transformMovieData(movie, favorites)
+				);
 			} catch (error) {
 				throw error;
 			}
@@ -119,7 +120,7 @@ export default function Home() {
 				>
 					Search
 				</Heading>
-			<SearchBar />
+				<SearchBar />
 			</Box>
 			{/* <Text fontSize='xl' mb={5}>
 				{JSON.stringify(favorites)}

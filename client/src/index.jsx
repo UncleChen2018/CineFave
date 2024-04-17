@@ -12,7 +12,7 @@ import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import { AuthTokenProvider } from './AuthTokenContext';
 import { UserInfoProvider } from './UserInfoContext';
 
-import { ChakraProvider, Box, Container } from '@chakra-ui/react';
+import { ChakraProvider, Box} from '@chakra-ui/react';
 import theme from './theme';
 
 import NotFound from './components/NotFound';

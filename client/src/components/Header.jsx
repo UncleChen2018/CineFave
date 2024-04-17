@@ -1,14 +1,4 @@
-import {
-	Heading,
-	Box,
-	Flex,
-	Text,
-	Button,
-	Image,
-	useColorModeValue,
-	Container,
-	useBreakpointValue,
-} from '@chakra-ui/react';
+import { Heading, Box, Flex, Text, Image } from '@chakra-ui/react';
 
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +6,7 @@ import LoginMenu from './LoginMenu';
 
 export default function Header() {
 	const navigate = useNavigate();
-	const { isAuthenticated, loginWithRedirect, user, isLoading, logout } =
+	const { isAuthenticated, loginWithRedirect, user, logout } =
 		useAuth0();
 
 	const handleLogin = () => {
@@ -24,7 +14,7 @@ export default function Header() {
 		const path = window.location.pathname;
 		const excludedPaths = ['/not-authorized'];
 		if (!excludedPaths.includes(path)) {
-		localStorage.setItem('lastPage', window.location.href);
+			localStorage.setItem('lastPage', window.location.href);
 		}
 
 		// Redirect to login

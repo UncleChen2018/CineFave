@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect,useLayoutEffect } from 'react';
+import React, { useState, useRef,useLayoutEffect } from 'react';
 import { Box, Text } from '@chakra-ui/react';
 import MarkdownReader from './MarkdownReader';
 
