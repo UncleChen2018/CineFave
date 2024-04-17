@@ -33,7 +33,7 @@ function MovieDetailPage() {
 	// for adding review
 	const handleAddReview = () => {
 		if (!isAuthenticated) {
-			localStorage.setItem('lastPage', window.location.pathname);
+			localStorage.setItem('lastPage', window.location.href);
 			loginWithRedirect();
 			return;
 		}
