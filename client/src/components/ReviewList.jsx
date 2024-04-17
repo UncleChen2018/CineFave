@@ -102,7 +102,7 @@ function ReviewList({ title, reviews, handleDelete, handleEdit }) {
 									` (Updated on ${formatDate(review.updated_at)})`}
 							</Text>
 						</VStack>
-						<CollapsibleMarkdown content={review.content} maxHeight='100px' />
+						<CollapsibleMarkdown key={`${review.id}}`} content={review.content} maxHeight='100px' />
 						{/* Add more review details here */}
 						{review.isAuthor && (
 							<HStack spacing={4} mt={2}>

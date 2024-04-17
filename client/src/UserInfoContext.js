@@ -35,6 +35,7 @@ export const UserInfoProvider = ({ children }) => {
 			if (!response.ok) throw new Error('Failed to fetch user profile.');
 			const data = await response.json();
 			setUserProfile(data);
+			return data;
 		} catch (error) {
 			console.error('Error fetching user profile:', error);
 			setError(error.message);
@@ -72,13 +73,11 @@ export const UserInfoProvider = ({ children }) => {
 
 	useEffect(() => {
 		if (isAuthenticated && accessToken) {
-			if (isAuthenticated && accessToken) {
-				fetchUserProfile().then((userProfile) => {
-					if (userProfile) {
-						fetchFavorites();
-					}
-				});
-			}
+			fetchUserProfile().then((userProfile) => {
+				if (userProfile) {
+					fetchFavorites();
+				}
+			});
 		}
 	}, [isAuthenticated, accessToken]);
 

@@ -19,26 +19,24 @@ export default function Header() {
 	const { isAuthenticated, loginWithRedirect, user, isLoading, logout } =
 		useAuth0();
 
-		
+	const handleLogin = () => {
+		// Save the current page in local storage
+		const path = window.location.pathname;
+		const excludedPaths = ['/not-authorized'];
+		if (!excludedPaths.includes(path)) {
+		localStorage.setItem('lastPage', window.location.href);
+		}
 
-  const handleLogin = () => {
-    // Save the current page in local storage
-    localStorage.setItem('lastPage', window.location.href);
-
-    // Redirect to login
-    loginWithRedirect({
-      // Optionally set the redirectUri dynamically
-      redirectUri: `${window.location.origin}/verify-user`
-    });
-  };
+		// Redirect to login
+		loginWithRedirect();
+	};
 
 	const handleLogout = () => {
 		localStorage.removeItem('userProfile');
 		localStorage.removeItem('favorites');
 		localStorage.removeItem('lastPage');
 		logout({ returnTo: window.location.origin });
-	}
-
+	};
 
 	return (
 		<Flex
@@ -60,10 +58,14 @@ export default function Header() {
 					}}
 				/>
 			</Box>
-			<Box flex='2' textAlign='center' cursor='pointer'
-					onClick={() => {
-						navigate('/'); // Navigate to the home page
-					}}>
+			<Box
+				flex='2'
+				textAlign='center'
+				cursor='pointer'
+				onClick={() => {
+					navigate('/'); // Navigate to the home page
+				}}
+			>
 				<Heading as='h1' size='xl'>
 					CineFave
 				</Heading>

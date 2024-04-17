@@ -17,7 +17,7 @@ const CollapsibleMarkdown = ({ content, maxHeight = '200px' }) => {
     checkContentOverflow();
     window.addEventListener('resize', checkContentOverflow);
     return () => window.removeEventListener('resize', checkContentOverflow);
-  }, []);
+  }, [content]);
 
   return (
     <Box mt='2'>

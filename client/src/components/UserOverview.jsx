@@ -39,7 +39,7 @@ function UserOverview() {
       {/* Bio Section */}
 			<Box bg="gray.50" p={4}>
 			<Text fontSize="xl" mb={2}>Bio:</Text>
-			<CollapsibleMarkdown content={userProfile.bio || 'Nothing yet, A Mysterious Member...'} maxHeight='200px' />
+			<CollapsibleMarkdown id={Date.now()} content={userProfile.bio || 'Nothing yet, A Mysterious Member...'} maxHeight='200px' />
 
       </Box>
 

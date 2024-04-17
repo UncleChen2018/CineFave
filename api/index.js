@@ -63,7 +63,6 @@ app.post('/verify-user', requireAuth, async (req, res) => {
 			});
 
 			res.json(newUser);
-			//console.log(newUser);
 		}
 	} catch (error) {
 		res.status(500).json({ error: error.message });
@@ -87,8 +86,6 @@ app.get('/userProfile', requireAuth, async (req, res) => {
 app.put('/userProfile', requireAuth, async (req, res) => {
 	const auth0Id = req.auth.payload.sub;
 	const { nickname, bio } = req.body;
-	console.log('from put userprofile:', nickname, bio);
-
 	// Initialize an empty object to hold fields to update
 	let updateData = {};
 

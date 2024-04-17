@@ -13,7 +13,6 @@ export default function useToggleFavorite() {
 
 	const handleLogin = () => {
 		localStorage.setItem('lastPage', window.location.href);
-		
 		loginWithRedirect();
 	};
 
