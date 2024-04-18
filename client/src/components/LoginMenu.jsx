@@ -44,7 +44,7 @@ const LoginMenu = ({ isAuthenticated, user, login, logout }) => {
 						<MenuDivider />
 						<MenuGroup>
 							<MenuItem
-								onClick={() => logout({ returnTo: window.location.origin })}
+								onClick={() => logout()}
 							>
 								Logout
 							</MenuItem>
