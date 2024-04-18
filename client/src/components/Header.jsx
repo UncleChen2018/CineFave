@@ -6,8 +6,7 @@ import LoginMenu from './LoginMenu';
 
 export default function Header() {
 	const navigate = useNavigate();
-	const { isAuthenticated, loginWithRedirect, user, logout } =
-		useAuth0();
+	const { isAuthenticated, loginWithRedirect, user, logout } = useAuth0();
 
 	const handleLogin = () => {
 		// Save the current page in local storage
@@ -22,10 +21,10 @@ export default function Header() {
 	};
 
 	const handleLogout = () => {
-		localStorage.removeItem('userProfile');
-		localStorage.removeItem('favorites');
 		localStorage.removeItem('lastPage');
-		logout({ returnTo: window.location.origin });
+		logout({
+			returnTo: window.location.origin,
+		});
 	};
 
 	return (

@@ -1,26 +1,24 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useAuthToken } from './AuthTokenContext';
 
-
 const UserInfoContext = createContext(null);
 
 export const UserInfoProvider = ({ children }) => {
-	const { isAuthenticated, accessToken } = useAuthToken();
+	const {
+		isAuthenticated,
+		accessToken,
+		isLoading: isTokenLoading,
+	} = useAuthToken();
 
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
 
-	// some state to store user profile and favorites
-	const [userProfile, setUserProfile] = useState(
-		() => JSON.parse(localStorage.getItem('userProfile')) || null
-	);
-	const [favorites, setFavorites] = useState(
-		() => JSON.parse(localStorage.getItem('favorites')) || []
-	);
+
+	const [userProfile, setUserProfile] = useState(null);
+
+	const [favorites, setFavorites] = useState([]);
 	// Function to fetch user profile
 	const fetchUserProfile = async () => {
-		setIsLoading(true);
-		setError(null);
 		try {
 			const response = await fetch(
 				`${process.env.REACT_APP_API_URL}/verify-user`,
@@ -38,19 +36,11 @@ export const UserInfoProvider = ({ children }) => {
 			return data;
 		} catch (error) {
 			console.error('Error fetching user profile:', error);
-			setError(error.message);
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
 	// Function to fetch favorites
 	const fetchFavorites = async () => {
-		if (!accessToken) {
-			setError('Access token is missing');
-			return;
-		}
-		setIsLoading(true);
 		try {
 			const response = await fetch(
 				`${process.env.REACT_APP_API_URL}/favorites`,
@@ -65,31 +55,66 @@ export const UserInfoProvider = ({ children }) => {
 			const data = await response.json();
 			setFavorites(data);
 		} catch (error) {
-			setError(error.message);
-		} finally {
-			setIsLoading(false);
+			console.error('Error fetching favorites:', error);
 		}
 	};
 
+	// if not authenticated, clear the session data
+	const clearSessionData = () => {
+		localStorage.removeItem('userProfile');
+		localStorage.removeItem('favorites');
+		setUserProfile(null);
+		setFavorites([]);
+	};
+
+	// useEffect(() => {
+	// 	console.log('isAuthenticated:', isAuthenticated);
+	// 	console.log('isTokenLoading:', isTokenLoading);
+	// 	console.log('accessToken:', accessToken);
+	// 	console.log('isLoading:', isLoading);
+	// 	console.log('userProfile:', JSON.stringify(userProfile));
+	// 	console.log('favorites:', JSON.stringify(favorites));
+
+	// 	// if (!isAuthenticated) {
+	// 	// 	clearSessionData();
+	// 	// }
+	// }, [
+	// 	isAuthenticated,
+	// 	isTokenLoading,
+	// 	accessToken,
+	// 	isLoading,
+	// 	userProfile,
+	// 	favorites,
+	// ]);
+
 	useEffect(() => {
-		if (isAuthenticated && accessToken) {
-			fetchUserProfile().then((userProfile) => {
+		const initializeUserInfo = async () => {
+			try {
+				const userProfile = await fetchUserProfile();
 				if (userProfile) {
-					fetchFavorites();
+					await fetchFavorites();
 				}
-			});
+			} catch (error) {
+				console.error('Error fetching user data:', error);
+				setError(error); // Set error state
+			} finally {
+				setIsLoading(false); // Set loading false only after all operations are complete
+			}
+		};
+
+		if (!isTokenLoading) {
+			if (accessToken) {
+				initializeUserInfo();
+			} else {
+				setIsLoading(false);
+			}
 		}
-	}, [isAuthenticated, accessToken]);
+	}, [accessToken, isTokenLoading]);
 
-	useEffect(() => {
-		// Persist user profile to localStorage when it changes
-		localStorage.setItem('userProfile', JSON.stringify(userProfile));
-	}, [userProfile]);
 
-	useEffect(() => {
-		// Persist favorites to localStorage when they change
-		localStorage.setItem('favorites', JSON.stringify(favorites));
-	}, [favorites]);
+	if (isLoading) {
+		return <div>Loading...</div>; // Or some loading indicator
+	}
 
 	return (
 		<UserInfoContext.Provider

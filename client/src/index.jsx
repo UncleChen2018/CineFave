@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 import {
 	BrowserRouter,
@@ -10,7 +10,8 @@ import {
 
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import { AuthTokenProvider } from './AuthTokenContext';
-import { UserInfoProvider } from './UserInfoContext';
+import { UserInfoProvider,useUserInfo } from './UserInfoContext';
+import { useAuthToken } from './AuthTokenContext';
 
 import { ChakraProvider, Box} from '@chakra-ui/react';
 import theme from './theme';
@@ -28,29 +29,29 @@ import EditProfilePage from './components/EditProfilePage';
 
 import SearchPage from './components/SearchPage';
 
+
 const container = document.getElementById('root');
 const root = ReactDOMClient.createRoot(container);
 
 const requestedScopes = ['profile', 'email'];
 
 const RequireAuth = () => {
-	const { isAuthenticated, isLoading } = useAuth0();
 
-	if (isLoading) {
-		return <div>Loading...</div>; // Or some loading indicator
-	}
+	const { userProfile, isLoading } = useUserInfo();
 
-	if (!isAuthenticated) {
+
+	if (!userProfile) {
 		// Store the path the user is coming from
-
 		localStorage.setItem('lastPage', window.location.href);
-
 		// Redirect to the not-authorized page
 		return <Navigate to='/not-authorized' replace />;
 	}
 
 	return <Outlet />;
 };
+
+
+
 
 root.render(
 	<React.StrictMode>
