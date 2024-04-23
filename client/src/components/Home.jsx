@@ -97,7 +97,7 @@ export default function Home() {
 	}, [favorites]); // This useEffect will run when favorites change
 
 	if (isLoading) {
-		return <Box>Loading...</Box>;
+		return <Box>Loading, due to database inactive, could take 30 seconds for the first login...</Box>;
 	}
 
 	if (error) {

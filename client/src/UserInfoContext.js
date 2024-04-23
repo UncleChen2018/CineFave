@@ -113,7 +113,7 @@ export const UserInfoProvider = ({ children }) => {
 
 
 	if (isLoading) {
-		return <div>Loading...</div>; // Or some loading indicator
+		return <div>Loading, due to database inactive, could take 30 seconds for the first login...</div>; // Or some loading indicator
 	}
 
 	return (

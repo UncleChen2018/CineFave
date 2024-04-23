@@ -16,7 +16,7 @@ export default function VerifyUser() {
                 const path = url.pathname + url.search; // Combine the path and the search query
                 navigate(path, { replace: true }); // Use navigate to avoid adding a new entry in the history stack
             } catch (e) {
-                console.error('Invalid URL in lastPage:', lastPageURL);
+                //console.error('Invalid URL in lastPage:', lastPageURL);
                 navigate('/', { replace: true }); // Fallback to home if URL is invalid
             }
         }
