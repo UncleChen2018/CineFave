@@ -24,5 +24,5 @@ export default function VerifyUser() {
 
     
 
-    return <div className='loading'>Loading...</div>;
+    return <div className='loading'>Loading, due to database inactive, could take 30 seconds for the first login...</div>;
 }
