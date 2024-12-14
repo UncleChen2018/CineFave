@@ -5,9 +5,9 @@ go to [loom](https://www.loom.com/share/4c2b675f1df94b5683f30b7a6e05ac2f?sid=3f8
 
 ## Note
 
-If you are experiencing delays logging in as a registered user, this may be due to the inactivity of the backend serverless database. Please allow a few minutes for the process to complete.  
+1. If you are logging in for the first time, it may take a few minutes due to the inactivity of the backend serverless database.  
 
-To resolve the issue more quickly, try clearing your cookies and logging in again.
+2. If you've logged in before and the process gets stuck in the waiting state, try clearing your cookies and logging in again.
 
 
 ##
